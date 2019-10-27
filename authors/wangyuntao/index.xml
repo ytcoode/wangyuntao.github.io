@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Home on 技术闲聊</title>
-    <link>http://www.example.com/</link>
-    <description>Recent content in Home on 技术闲聊</description>
+    <title>wangyuntao on 技术闲聊</title>
+    <link>http://www.example.com/authors/wangyuntao/</link>
+    <description>Recent content in wangyuntao on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sun, 27 Oct 2019 18:02:27 +0800</lastBuildDate>
     
-	<atom:link href="http://www.example.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://www.example.com/authors/wangyuntao/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>About</title>
-      <link>http://www.example.com/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://www.example.com/about/</guid>
-      <description>记录下日常的技术细节</description>
-    </item>
     
     <item>
       <title>Git示例教程 - 撤销上次提交</title>
@@ -58,15 +49,6 @@ $ git reset --hard # 撤销所有文件的修改（不算未进入版本控制�
 $ mkdir repo $ cd repo $ git init # 初始化一个空Git仓库 $ echo a &amp;gt; f1.txt $ git add . $ git commit -m f1 # 将f1.txt加入到版本控制中 $ echo b &amp;gt; f1.txt # 修改f1.txt的内容 $ touch f2.txt # 创建新文件f2.txt，其并未进入到版本控制中 执行完上面的命令后，我们已经有了一个可供测试的Git仓库。
 再用下面的命令看下文件的变化情况：
 $ git status -s M f1.txt ?? f2.txt $ git -P diff diff --git a/f1.</description>
-    </item>
-    
-    <item>
-      <title>Search</title>
-      <link>http://www.example.com/search/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://www.example.com/search/</guid>
-      <description></description>
     </item>
     
   </channel>
