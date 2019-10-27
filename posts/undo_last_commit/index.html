@@ -2,21 +2,29 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='聊聊有关技术的那些事'>
+<meta name='description' content='最终命令：
+git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
+先使用下面的命令初始化一个测试用的Git仓库：
+# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
+$ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
+$ git reset HEAD^ Unstaged changes after reset: M a.'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='技术闲聊'>
-<meta property='og:description' content='聊聊有关技术的那些事'>
-<meta property='og:url' content='http://www.example.com/'>
+<meta property='og:title' content='Git示例教程 - 撤销上次提交 • 技术闲聊'>
+<meta property='og:description' content='最终命令：
+git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
+先使用下面的命令初始化一个测试用的Git仓库：
+# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
+$ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
+$ git reset HEAD^ Unstaged changes after reset: M a.'>
+<meta property='og:url' content='http://www.example.com/posts/undo_last_commit/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='article:section' content='posts'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.0" />
 
-  <title>技术闲聊</title>
-  <link rel='canonical' href='http://www.example.com/'>
-  
-    <link href="http://www.example.com/index.xml" rel="alternate" type="application/rss+xml" title="技术闲聊" />
+  <title>Git示例教程 - 撤销上次提交 • 技术闲聊</title>
+  <link rel='canonical' href='http://www.example.com/posts/undo_last_commit/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -27,7 +35,7 @@
   
 
 </head>
-<body class='home type-page has-sidebar'>
+<body class='page type-posts has-sidebar'>
 
   <div class='site'><div id='sidebar' class='sidebar'>
   <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
@@ -105,17 +113,19 @@
       </li></ul>
   </div>
 </nav><div class='header-widgets'>
-        <div class='container'><style>.widget-breadcrumbs li:after{content:'\2f '}</style>
+        <div class='container'>
+    
+    <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><span>技术闲聊</span></li></ol>
+      <ol><li><a href='/'>技术闲聊</a></li><li><a href='/posts/'>Posts</a></li><li><span>Git示例教程 - 撤销上次提交</span></li></ol>
     </nav>
   </section></div>
       </div>
 
       <header id='header' class='header site-header'>
         <div class='container sep-after'>
-          <div class='header-info'><h1 class='site-title title'>技术闲聊</h1><p class='desc site-desc'>聊聊有关技术的那些事</p>
+          <div class='header-info'><p class='site-title title'>技术闲聊</p><p class='desc site-desc'>聊聊有关技术的那些事</p>
           </div>
         </div>
       </header>
@@ -123,66 +133,120 @@
       <main id='content'>
 
 
-<div class='home-widgets'>
-  <div class='container sep-before'><section class='widget widget-recent_posts sep-after'>
-  <header>
-    <h4 class='title widget-title'>Recent Posts</h4>
-  </header>
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Git示例教程 - 撤销上次提交</h1>
+      
 
-  <ul class='list'>
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+  <line x1="16" y1="2" x2="16" y2="6"/>
+  <line x1="8" y1="2" x2="8" y2="6"/>
+  <line x1="3" y1="10" x2="21" y2="10"/>
+  
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
 </span>
 
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/posts/undo_last_commit/'>Git示例教程 - 撤销上次提交</a>
-    </h3>
-  </header>
-</li>
-
   
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  
+<span class='reading-time'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <circle cx="12" cy="12" r="10"/>
+  <polyline points="12 6 12 12 15 15"/>
+  
+</svg>
+One min read
 </span>
 
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/posts/undo_changes_to_one_file/'>Git示例教程 - 撤销对单个文件的修改</a>
-    </h3>
-  </header>
-</li>
 
-  
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
-</span>
-
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/posts/undo_changes_to_all_files/'>Git示例教程 - 撤销对所有文件的修改</a>
-    </h3>
-  </header>
-</li>
-
-  
-  </ul>
-</section>
 </div>
-</div>      </main>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <p>最终命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git reset HEAD^        <span style="color:#75715e"># 上次提交内容会被保存到工作目录</span>
+git reset --hard HEAD^ <span style="color:#75715e"># 上次提交内容会被直接丢弃</span></code></pre></div>
+<p>情景模拟：</p>
+
+<p>先使用下面的命令初始化一个测试用的Git仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 初始化一个空的Git仓库</span>
+mkdir repo <span style="color:#f92672">&amp;&amp;</span> cd repo
+git init
+
+<span style="color:#75715e"># 将a.txt加入到版本控制中</span>
+echo A1 &gt; a.txt
+git add .
+git commit -m <span style="color:#ae81ff">1</span>
+
+<span style="color:#75715e"># 将a.txt的内容修改为A2并提交</span>
+echo A2 &gt; a.txt
+git commit -am <span style="color:#ae81ff">2</span></code></pre></div>
+<p>执行完上面的命令后，看下当前的Git日志：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --pretty<span style="color:#f92672">=</span>oneline --abbrev-commit
+<span style="color:#ae81ff">4490479</span> <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> <span style="color:#ae81ff">2</span>
+bf92587 <span style="color:#ae81ff">1</span></code></pre></div>
+<p>假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset HEAD^
+Unstaged changes after reset:
+M  a.txt
+
+$ git -P log --pretty<span style="color:#f92672">=</span>oneline --abbrev-commit
+bf92587 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> <span style="color:#ae81ff">1</span>
+
+$ cat a.txt
+A2</code></pre></div>
+<p>由上可见，reset命令撤销了上次提交，并把这次提交的内容保存到了工作目录。</p>
+
+<p>如果我们想撤销上次提交，并且丢弃上次提交修改的内容，可以用另外一条reset命令，这个就不在这里演示了，有兴趣的同学可以自己试下。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
+  
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/'>Git示例教程</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/posts/undo_changes_to_one_file/'>
+        <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="20" y1="12" x2="4" y2="12"/>
+  <polyline points="10 18 4 12 10 6"/>
+  
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 撤销对单个文件的修改</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
 
       <footer id='footer' class='footer'>
         <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>

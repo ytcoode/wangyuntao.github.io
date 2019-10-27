@@ -2,21 +2,29 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='聊聊有关技术的那些事'>
+<meta name='description' content='最终命令：
+$ git reset --hard # 撤销所有文件的修改（不算未进入版本控制的文件） $ git clean -fd # 删除所有未进入版本控制的文件 下面用一个例子展示下这两个命令的使用。
+先用下面的命令初始化一个测试用的Git仓库：
+$ mkdir repo $ cd repo $ git init # 初始化一个空Git仓库 $ echo a &gt; f1.txt $ git add . $ git commit -m f1 # 将f1.txt加入到版本控制中 $ echo b &gt; f1.txt # 修改f1.txt的内容 $ touch f2.txt # 创建新文件f2.txt，其并未进入到版本控制中 执行完上面的命令后，我们已经有了一个可供测试的Git仓库。
+再用下面的命令看下文件的变化情况：
+$ git status -s M f1.txt ?? f2.txt $ git -P diff diff --git a/f1.'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='技术闲聊'>
-<meta property='og:description' content='聊聊有关技术的那些事'>
-<meta property='og:url' content='http://www.example.com/'>
+<meta property='og:title' content='Git示例教程 - 撤销对所有文件的修改 • 技术闲聊'>
+<meta property='og:description' content='最终命令：
+$ git reset --hard # 撤销所有文件的修改（不算未进入版本控制的文件） $ git clean -fd # 删除所有未进入版本控制的文件 下面用一个例子展示下这两个命令的使用。
+先用下面的命令初始化一个测试用的Git仓库：
+$ mkdir repo $ cd repo $ git init # 初始化一个空Git仓库 $ echo a &gt; f1.txt $ git add . $ git commit -m f1 # 将f1.txt加入到版本控制中 $ echo b &gt; f1.txt # 修改f1.txt的内容 $ touch f2.txt # 创建新文件f2.txt，其并未进入到版本控制中 执行完上面的命令后，我们已经有了一个可供测试的Git仓库。
+再用下面的命令看下文件的变化情况：
+$ git status -s M f1.txt ?? f2.txt $ git -P diff diff --git a/f1.'>
+<meta property='og:url' content='http://www.example.com/posts/undo_changes_to_all_files/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='article:section' content='posts'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.0" />
 
-  <title>技术闲聊</title>
-  <link rel='canonical' href='http://www.example.com/'>
-  
-    <link href="http://www.example.com/index.xml" rel="alternate" type="application/rss+xml" title="技术闲聊" />
+  <title>Git示例教程 - 撤销对所有文件的修改 • 技术闲聊</title>
+  <link rel='canonical' href='http://www.example.com/posts/undo_changes_to_all_files/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -27,7 +35,7 @@
   
 
 </head>
-<body class='home type-page has-sidebar'>
+<body class='page type-posts has-sidebar'>
 
   <div class='site'><div id='sidebar' class='sidebar'>
   <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
@@ -105,17 +113,19 @@
       </li></ul>
   </div>
 </nav><div class='header-widgets'>
-        <div class='container'><style>.widget-breadcrumbs li:after{content:'\2f '}</style>
+        <div class='container'>
+    
+    <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><span>技术闲聊</span></li></ol>
+      <ol><li><a href='/'>技术闲聊</a></li><li><a href='/posts/'>Posts</a></li><li><span>Git示例教程 - 撤销对所有文件的修改</span></li></ol>
     </nav>
   </section></div>
       </div>
 
       <header id='header' class='header site-header'>
         <div class='container sep-after'>
-          <div class='header-info'><h1 class='site-title title'>技术闲聊</h1><p class='desc site-desc'>聊聊有关技术的那些事</p>
+          <div class='header-info'><p class='site-title title'>技术闲聊</p><p class='desc site-desc'>聊聊有关技术的那些事</p>
           </div>
         </div>
       </header>
@@ -123,66 +133,136 @@
       <main id='content'>
 
 
-<div class='home-widgets'>
-  <div class='container sep-before'><section class='widget widget-recent_posts sep-after'>
-  <header>
-    <h4 class='title widget-title'>Recent Posts</h4>
-  </header>
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Git示例教程 - 撤销对所有文件的修改</h1>
+      
 
-  <ul class='list'>
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+  <line x1="16" y1="2" x2="16" y2="6"/>
+  <line x1="8" y1="2" x2="8" y2="6"/>
+  <line x1="3" y1="10" x2="21" y2="10"/>
+  
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
 </span>
 
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/posts/undo_last_commit/'>Git示例教程 - 撤销上次提交</a>
-    </h3>
-  </header>
-</li>
-
   
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  
+<span class='reading-time'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <circle cx="12" cy="12" r="10"/>
+  <polyline points="12 6 12 12 15 15"/>
+  
+</svg>
+One min read
 </span>
 
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/posts/undo_changes_to_one_file/'>Git示例教程 - 撤销对单个文件的修改</a>
-    </h3>
-  </header>
-</li>
 
-  
-    <li class='item'>
-  <div class='meta'>
-    <span>
-  <span class='screen-reader-text'>Posted on </span>
-  <time datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
-</span>
-
-  </div>
-  <header class='item-header'>
-    <h3 class='item-title'>
-      <a href='/posts/undo_changes_to_all_files/'>Git示例教程 - 撤销对所有文件的修改</a>
-    </h3>
-  </header>
-</li>
-
-  
-  </ul>
-</section>
 </div>
-</div>      </main>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <p>最终命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset --hard <span style="color:#75715e"># 撤销所有文件的修改（不算未进入版本控制的文件）</span>
+$ git clean -fd    <span style="color:#75715e"># 删除所有未进入版本控制的文件</span></code></pre></div>
+<p>下面用一个例子展示下这两个命令的使用。</p>
+
+<p>先用下面的命令初始化一个测试用的Git仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ mkdir repo
+$ cd repo
+$ git init         <span style="color:#75715e"># 初始化一个空Git仓库</span>
+
+$ echo a &gt; f1.txt
+$ git add .
+$ git commit -m f1 <span style="color:#75715e"># 将f1.txt加入到版本控制中</span>
+
+$ echo b &gt; f1.txt  <span style="color:#75715e"># 修改f1.txt的内容</span>
+$ touch f2.txt     <span style="color:#75715e"># 创建新文件f2.txt，其并未进入到版本控制中</span></code></pre></div>
+<p>执行完上面的命令后，我们已经有了一个可供测试的Git仓库。</p>
+
+<p>再用下面的命令看下文件的变化情况：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git status -s
+ M f1.txt
+?? f2.txt
+
+$ git -P diff
+diff --git a/f1.txt b/f1.txt
+index <span style="color:#ae81ff">7898192</span>..6178079 <span style="color:#ae81ff">100644</span>
+--- a/f1.txt
++++ b/f1.txt
+@@ -1 +1 @@
+-a
++b</code></pre></div>
+<p>由上可见，f1.txt的内容由a变为了b，f2.txt是新创建的，还未进入到版本控制中。</p>
+
+<p>现在执行上面的撤销命令，看下是如何撤销修改的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset --hard
+HEAD is now at 5b3c640 f1
+
+$ git status -s
+?? f2.txt
+
+$ git clean -fd
+Removing f2.txt
+
+$ git status
+On branch master
+nothing to commit, working tree clean</code></pre></div>
+<p>由上可见，执行完reset命令后，f1.txt文件的修改被撤销，但f2.txt文件还在。</p>
+
+<p>执行完clean命令后，f2.txt文件也不在了。</p>
+
+<p>至此，两条命令撤销了对所有文件的修改，Git仓库回到了原始状态。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
+  
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/'>Git示例教程</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='next-entry sep-before'>
+      <a href='/posts/undo_changes_to_one_file/'>
+        <span class='screen-reader-text'>Next post: </span>Git示例教程 - 撤销对单个文件的修改<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="4" y1="12" x2="20" y2="12"/>
+  <polyline points="14 6 20 12 14 18"/>
+  
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
 
       <footer id='footer' class='footer'>
         <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>

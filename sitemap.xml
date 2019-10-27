@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://www.example.com/categories/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/undo_last_commit/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/undo_changes_to_one_file/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/undo_changes_to_all_files/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/</loc>
+    <lastmod>2019-10-27T18:02:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/authors/</loc>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/series/</loc>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/tags/</loc>
+  </url>
+  
+</urlset>
