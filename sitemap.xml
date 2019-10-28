@@ -52,6 +52,21 @@
   </url>
   
   <url>
+    <loc>http://www.example.com/posts/delete_branch/</loc>
+    <lastmod>2019-10-28T23:02:22+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/create_branch/</loc>
+    <lastmod>2019-10-28T23:02:21+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/modify_last_commit/</loc>
+    <lastmod>2019-10-28T23:02:20+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.example.com/posts/undo_last_commit/</loc>
     <lastmod>2019-10-27T18:02:27+08:00</lastmod>
   </url>

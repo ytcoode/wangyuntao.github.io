@@ -2,29 +2,29 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='最终命令：
-git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
-先使用下面的命令初始化一个测试用的Git仓库：
-# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
-$ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
-$ git reset HEAD^ Unstaged changes after reset: M a.'>
+<meta name='description' content='相关命令：
+git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
+为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
+$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/master ab5a63d Initial commit  由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
+下面我们用上一篇文章中介绍过的命令，创建一个测试分支，并同步到远端：
+$ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P branch -avv b1 ab5a63d [origin/b1] Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/b1 ab5a63d Initial commit remotes/origin/master ab5a63d Initial commit 由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='Git示例教程 - 撤销上次提交 • wangyuntao'>
-<meta property='og:description' content='最终命令：
-git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
-先使用下面的命令初始化一个测试用的Git仓库：
-# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
-$ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
-$ git reset HEAD^ Unstaged changes after reset: M a.'>
-<meta property='og:url' content='http://www.example.com/posts/undo_last_commit/'>
+<meta property='og:title' content='Git示例教程 - 删除本地分支及远程分支 • wangyuntao'>
+<meta property='og:description' content='相关命令：
+git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
+为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
+$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/master ab5a63d Initial commit  由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
+下面我们用上一篇文章中介绍过的命令，创建一个测试分支，并同步到远端：
+$ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P branch -avv b1 ab5a63d [origin/b1] Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/b1 ab5a63d Initial commit remotes/origin/master ab5a63d Initial commit 由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。'>
+<meta property='og:url' content='http://www.example.com/posts/delete_branch/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-28T23:02:22&#43;08:00'/><meta property='article:modified_time' content='2019-10-28T23:02:22&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.0" />
 
-  <title>Git示例教程 - 撤销上次提交 • wangyuntao</title>
-  <link rel='canonical' href='http://www.example.com/posts/undo_last_commit/'>
+  <title>Git示例教程 - 删除本地分支及远程分支 • wangyuntao</title>
+  <link rel='canonical' href='http://www.example.com/posts/delete_branch/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -121,7 +121,7 @@ $ git reset HEAD^ Unstaged changes after reset: M a.'>
     <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><a href='/'>&gt; </a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 撤销上次提交</span></li></ol>
+      <ol><li><a href='/'>&gt; </a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 删除本地分支及远程分支</span></li></ol>
     </nav>
   </section></div>
       </div>
@@ -140,7 +140,7 @@ $ git reset HEAD^ Unstaged changes after reset: M a.'>
   <header class='header entry-header'>
   <div class='container sep-after'>
     <div class='header-info'>
-      <h1 class='title'>Git示例教程 - 撤销上次提交</h1>
+      <h1 class='title'>Git示例教程 - 删除本地分支及远程分支</h1>
       
 
     </div>
@@ -154,7 +154,7 @@ $ git reset HEAD^ Unstaged changes after reset: M a.'>
   
 </svg>
 <span class='screen-reader-text'>Posted on </span>
-  <time class='entry-date' datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  <time class='entry-date' datetime='2019-10-28T23:02:22&#43;08:00'>2019, Oct 28</time>
 </span>
 
   <span class='byline'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
@@ -185,41 +185,61 @@ One min read
   
 
   <div class='container entry-content'>
-  <p>最终命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git reset HEAD^        <span style="color:#75715e"># 上次提交内容会被保存到工作目录</span>
-git reset --hard HEAD^ <span style="color:#75715e"># 上次提交内容会被直接丢弃</span></code></pre></div>
+  <p>相关命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git branch -d 要删除的分支      <span style="color:#75715e"># 删除本地分支</span>
+git branch -D 要删除的分支      <span style="color:#75715e"># 强制删除本地分支</span>
+git push -d origin 要删除的分支 <span style="color:#75715e"># 删除远程分支</span></code></pre></div>
 <p>情景模拟：</p>
 
-<p>先使用下面的命令初始化一个测试用的Git仓库：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 初始化一个空的Git仓库</span>
-mkdir repo <span style="color:#f92672">&amp;&amp;</span> cd repo
-git init
+<p>为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：</p>
 
-<span style="color:#75715e"># 将a.txt加入到版本控制中</span>
-echo A1 &gt; a.txt
-git add .
-git commit -m <span style="color:#ae81ff">1</span>
+<pre><code>$ git clone https://github.com/wangyuntao/git-test-repo.git
+Cloning into 'git-test-repo'...
+# 省略部分输出 #
+$ cd git-test-repo
+$ git -P branch -avv
+* master                ab5a63d [origin/master] Initial commit
+  remotes/origin/HEAD   -&gt; origin/master
+  remotes/origin/master ab5a63d Initial commit
+</code></pre>
 
-<span style="color:#75715e"># 将a.txt的内容修改为A2并提交</span>
-echo A2 &gt; a.txt
-git commit -am <span style="color:#ae81ff">2</span></code></pre></div>
-<p>执行完上面的命令后，看下当前的Git日志：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --pretty<span style="color:#f92672">=</span>oneline --abbrev-commit
-<span style="color:#ae81ff">4490479</span> <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> <span style="color:#ae81ff">2</span>
-bf92587 <span style="color:#ae81ff">1</span></code></pre></div>
-<p>假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset HEAD^
-Unstaged changes after reset:
-M  a.txt
+<p>由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。</p>
 
-$ git -P log --pretty<span style="color:#f92672">=</span>oneline --abbrev-commit
-bf92587 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> <span style="color:#ae81ff">1</span>
+<p>下面我们用<a href="create_branch.md" target="_blank">上一篇文章</a>中介绍过的命令，创建一个测试分支，并同步到远端：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git branch b1
+$ git push --set-upstream origin b1
+<span style="color:#75715e"># 省略输出 #</span>
+$ git -P branch -avv
+  b1                    ab5a63d <span style="color:#f92672">[</span>origin/b1<span style="color:#f92672">]</span> Initial commit
+* master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
+  remotes/origin/HEAD   -&gt; origin/master
+  remotes/origin/b1     ab5a63d Initial commit
+  remotes/origin/master ab5a63d Initial commit</code></pre></div>
+<p>由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。</p>
 
-$ cat a.txt
-A2</code></pre></div>
-<p>由上可见，reset命令撤销了上次提交，并把这次提交的内容保存到了工作目录。</p>
+<p>下面我们来测试下对应的删除命令。</p>
 
-<p>如果我们想撤销上次提交，并且丢弃上次提交修改的内容，可以用另外一条reset命令，这个就不在这里演示了，有兴趣的同学可以自己试下。</p>
+<p>先删除本地分支：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git branch -d b1   <span style="color:#75715e"># 删除本地分支b1</span>
+Deleted branch b1 <span style="color:#f92672">(</span>was ab5a63d<span style="color:#f92672">)</span>.
+$ git -P branch -avv <span style="color:#75715e"># 查看当前分支情况</span>
+* master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
+  remotes/origin/HEAD   -&gt; origin/master
+  remotes/origin/b1     ab5a63d Initial commit
+  remotes/origin/master ab5a63d Initial commit</code></pre></div>
+<p>由上可见，本地的b1分支已经没有了，但其对应的远程分支origin/b1还在。</p>
+
+<p>我们再用下面的命令删除其对应的远程分支：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git push -d origin b1 <span style="color:#75715e"># 删除远端的b1分支</span>
+To https://github.com/wangyuntao/git-test-repo.git
+ - <span style="color:#f92672">[</span>deleted<span style="color:#f92672">]</span>         b1
+$ git -P branch -avv    <span style="color:#75715e"># 查看当前的分支情况</span>
+* master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
+  remotes/origin/HEAD   -&gt; origin/master
+  remotes/origin/master ab5a63d Initial commit</code></pre></div>
+<p>由上可见，b1对应的远程分支origin/b1也被删除了，此时如果我们到GitHub上看一下的话，也会发现，b1分支已经没有了。</p>
+
+<p>好了，到这里有关本地分支及远程分支的删除操作就已经讲完了，希望对你有所帮助。</p>
 
 </div>
 
@@ -247,7 +267,7 @@ A2</code></pre></div>
 
 <nav class='entry-nav'>
   <div class='container'><div class='prev-entry sep-before'>
-      <a href='/posts/undo_changes_to_one_file/'>
+      <a href='/posts/create_branch/'>
         <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <line x1="20" y1="12" x2="4" y2="12"/>
@@ -255,10 +275,10 @@ A2</code></pre></div>
   
 </svg>
  Previous</span>
-        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 撤销对单个文件的修改</a>
+        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 创建本地分支及远程分支</a>
     </div><div class='next-entry sep-before'>
-      <a href='/posts/modify_last_commit/'>
-        <span class='screen-reader-text'>Next post: </span>Git示例教程 - 修改上次提交<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+      <a href='/posts/branch_sync/'>
+        <span class='screen-reader-text'>Next post: </span>Git示例教程 - 同步本地分支的添加删除状态到远程（或反之）<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <line x1="4" y1="12" x2="20" y2="12"/>
   <polyline points="14 6 20 12 14 18"/>

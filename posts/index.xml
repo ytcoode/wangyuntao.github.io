@@ -24,6 +24,48 @@ $ git clone https://github.com/wangyuntao/git-test-repo.git repo2 # 省略输出
     </item>
     
     <item>
+      <title>Git示例教程 - 删除本地分支及远程分支</title>
+      <link>http://www.example.com/posts/delete_branch/</link>
+      <pubDate>Mon, 28 Oct 2019 23:02:22 +0800</pubDate>
+      
+      <guid>http://www.example.com/posts/delete_branch/</guid>
+      <description>相关命令：
+git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
+为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
+$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master ab5a63d Initial commit  由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
+下面我们用上一篇文章中介绍过的命令，创建一个测试分支，并同步到远端：
+$ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P branch -avv b1 ab5a63d [origin/b1] Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/b1 ab5a63d Initial commit remotes/origin/master ab5a63d Initial commit 由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。</description>
+    </item>
+    
+    <item>
+      <title>Git示例教程 - 创建本地分支及远程分支</title>
+      <link>http://www.example.com/posts/create_branch/</link>
+      <pubDate>Mon, 28 Oct 2019 23:02:21 +0800</pubDate>
+      
+      <guid>http://www.example.com/posts/create_branch/</guid>
+      <description>相关命令：
+git branch 新分支名 # 基于当前分支创建一个新分支 git push --set-upstream origin 新分支名 # 将新分支推送到远端 情景模拟：
+为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
+$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &amp;#39;git-test-repo&amp;#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master ab5a63d Initial commit 由上可见，该仓库目前有个本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
+现在我们基于master分支，再创建一个分支b1：
+$ git branch b1 # 创建分支b1 $ git -P branch -avv # 查看当前分支情况 b1 ab5a63d Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master ab5a63d Initial commit 由上可见，该仓库现在多了一个本地分支b1，但其目前并没有对应的远程分支。</description>
+    </item>
+    
+    <item>
+      <title>Git示例教程 - 修改上次提交</title>
+      <link>http://www.example.com/posts/modify_last_commit/</link>
+      <pubDate>Mon, 28 Oct 2019 23:02:20 +0800</pubDate>
+      
+      <guid>http://www.example.com/posts/modify_last_commit/</guid>
+      <description>如果只是修改上次提交的日志，可以直接使用下面的命令：
+git commit --amend -m 新的提交日志 如果上次提交的内容有误或者不全，想要修改上次提交中文件的内容，或是添加新的文件，可以执行下面的命令：
+# 先修改对应的文件 # git add 修改的文件或新文件 # 执行下面的命令，将这次修改的内容合并到上次提交 git commit --amend --no-edit 情景模拟：
+先使用下面的命令初始化一个测试用的Git仓库：
+# 初始化一个空的Git仓库 mkdir repo &amp;amp;&amp;amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &amp;gt; a.txt git add . git commit -m 1 执行完上面的命令后，你发现提交的日志不太友好，想要修改下，可以使用下面的命令：
+$ git commit --amend -m 正确的日志 [master e80dc2f] 正确的日志 Date: Wed Oct 23 17:17:41 2019 +0800 1 file changed, 1 insertion(+) create mode 100644 a.txt $ git -P log --pretty=oneline --abbrev-commit # 确认日志是修改了 e80dc2f (HEAD -&amp;gt; master) 正确的日志 由上可见，通过上面的命令，上次提交的日志信息得到了修复。</description>
+    </item>
+    
+    <item>
       <title>Git示例教程 - 撤销上次提交</title>
       <link>http://www.example.com/posts/undo_last_commit/</link>
       <pubDate>Sun, 27 Oct 2019 18:02:27 +0800</pubDate>
