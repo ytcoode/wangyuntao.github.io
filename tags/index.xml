@@ -5,7 +5,7 @@
     <link>http://www.example.com/tags/</link>
     <description>Recent content in Tags on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 29 Oct 2019 17:17:17 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 29 Oct 2019 22:34:07 +0800</lastBuildDate>
     
 	<atom:link href="http://www.example.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,7 +13,7 @@
     <item>
       <title>Git</title>
       <link>http://www.example.com/tags/git/</link>
-      <pubDate>Tue, 29 Oct 2019 17:17:17 +0800</pubDate>
+      <pubDate>Tue, 29 Oct 2019 22:34:07 +0800</pubDate>
       
       <guid>http://www.example.com/tags/git/</guid>
       <description></description>

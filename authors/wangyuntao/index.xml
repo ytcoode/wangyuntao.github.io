@@ -5,10 +5,23 @@
     <link>http://www.example.com/authors/wangyuntao/</link>
     <description>Recent content in wangyuntao on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 29 Oct 2019 17:17:17 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 29 Oct 2019 22:34:07 +0800</lastBuildDate>
     
 	<atom:link href="http://www.example.com/authors/wangyuntao/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Git示例教程 - 命令别名</title>
+      <link>http://www.example.com/posts/git/command_alias/</link>
+      <pubDate>Tue, 29 Oct 2019 22:34:07 +0800</pubDate>
+      
+      <guid>http://www.example.com/posts/git/command_alias/</guid>
+      <description>相关命令：
+git config --global alias.别名 别名代表的真正命令 对于那些经常使用的，或者是特别复杂的Git命令，我们可以为其设置别名，这样在我们想要执行对应的Git命令时，只要执行这个别名命令就好了，简单方便。
+下面来演示下。
+当我们在命令行中，想要以图形化的方式查看当前分支的提交日志时，可以使用下面的命令：
+$ git log --graph --oneline * 8005803a2ca0 (HEAD -&amp;gt; master, origin/master, origin/HEAD) Merge tag &amp;#39;arc-5.4-rc6&amp;#39; of git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc |\ | * 5effc09c4907 ARC: perf: Accommodate big-endian CPU | * ab563bf54a4d ARC: [plat-hsdk]: Enable on-boardi SPI ADC IC | * 8ca8fa7f22dc ARC: [plat-hsdk]: Enable on-board SPI NOR flash IC * | 0365fb6baeb1 Merge branch &amp;#39;for-linus&amp;#39; of git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid |\ \ | * | 09f3dbe47473 HID: i2c-hid: add Trekstor Primebook C11B to descriptor override | * | 08c453f6d073 HID: logitech-hidpp: do all FF cleanup in hidpp_ff_destroy() | * | 905d754c53a5 HID: logitech-hidpp: rework device validation # 省略输出 # 上面命令显示的是当前linux内核master分支的提交日志。</description>
+    </item>
     
     <item>
       <title>Git示例教程 - 命令行中图形化显示提交日志</title>
