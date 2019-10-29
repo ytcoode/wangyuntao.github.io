@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang='en'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='相关命令：
+# 图形化显示当前分支的提交日志 git log --graph --oneline # 图形化显示当前分支的提交日志及每次提交的变更内容 git log --graph --patch # 图形化显示所有分支的提交日志 git log --graph --oneline --all # 图形化显示所有分支的提交日志及每次提交的变更内容 git log --graph --patch --all 效果演示：
+我们先用下面的命令创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo &amp;&amp; cd repo &amp;&amp; git init # master分支提交m1 echo m1 &gt; m1.txt &amp;&amp; git add . &amp;&amp; git commit -m m1 # b分支提交b1、b2 git checkout -b b echo b1 &gt; b1.txt &amp;&amp; git add . &amp;&amp; git commit -m b1 echo b2 &gt; b2.'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Git示例教程 - 命令行中图形化显示提交日志 • wangyuntao'>
+<meta property='og:description' content='相关命令：
+# 图形化显示当前分支的提交日志 git log --graph --oneline # 图形化显示当前分支的提交日志及每次提交的变更内容 git log --graph --patch # 图形化显示所有分支的提交日志 git log --graph --oneline --all # 图形化显示所有分支的提交日志及每次提交的变更内容 git log --graph --patch --all 效果演示：
+我们先用下面的命令创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo &amp;&amp; cd repo &amp;&amp; git init # master分支提交m1 echo m1 &gt; m1.txt &amp;&amp; git add . &amp;&amp; git commit -m m1 # b分支提交b1、b2 git checkout -b b echo b1 &gt; b1.txt &amp;&amp; git add . &amp;&amp; git commit -m b1 echo b2 &gt; b2.'>
+<meta property='og:url' content='http://www.example.com/posts/git/log_graph/'>
+<meta property='og:site_name' content='技术闲聊'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-29T17:17:17&#43;08:00'/><meta property='article:modified_time' content='2019-10-29T17:17:17&#43;08:00'/><meta name='twitter:card' content='summary'>
+
+<meta name="generator" content="Hugo 0.59.0" />
+
+  <title>Git示例教程 - 命令行中图形化显示提交日志 • wangyuntao</title>
+  <link rel='canonical' href='http://www.example.com/posts/git/log_graph/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.6a060eb7.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+  
+
+</head>
+<body class='page type-posts has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/logo.png'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      技术闲聊
+      </a>
+    </h2>
+    <div class='desc'>
+    聊聊技术的那些事
+    </div>
+  </header>
+
+</section>
+<section class='widget widget-search sep-after'>
+  <header>
+    <h4 class='title widget-title'>Search</h4>
+  </header>
+
+  <form action='/search' id='search-form' class='search-form'>
+    <label>
+      <span class='screen-reader-text'>Search</span>
+      <input id='search-term' class='search-term' type='search' name='q' placeholder='Search&hellip;'>
+    </label></form>
+
+</section>
+<section class='widget widget-sidebar_menu sep-after'><nav id='sidebar-menu' class='menu sidebar-menu' aria-label='Sidebar Menu'>
+    <div class='container'>
+      <ul><li class='item'>
+  <a href='/posts/'>文章</a></li><li class='item'>
+  <a href='/%E5%85%B3%E4%BA%8E/'>关于</a></li></ul>
+    </div>
+  </nav>
+
+</section><section class='widget widget-taxonomy_cloud sep-after'>
+  <header>
+    <h4 class='title widget-title'>Tags</h4>
+  </header>
+
+  <div class='container list-container'>
+  <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/git/' style='font-size:1em'>Git</a>
+      </li></ul>
+</div>
+
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="3" y1="12" x2="21" y2="12" />
+  <line x1="3" y1="6" x2="21" y2="6" />
+  <line x1="3" y1="18" x2="21" y2="18" />
+  
+</svg>
+</span>
+  <span class='close'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="18" y1="6" x2="6" y2="18" />
+  <line x1="6" y1="6" x2="18" y2="18" />
+  
+</svg>
+</span>
+</button><div class='header-widgets'>
+        <div class='container'>
+    
+    <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
+  <section class='widget widget-breadcrumbs sep-after'>
+    <nav id='breadcrumbs'>
+      <ol><li><a href='/'>&gt; </a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 命令行中图形化显示提交日志</span></li></ol>
+    </nav>
+  </section></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>技术闲聊</p><p class='desc site-desc'>聊聊技术的那些事</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Git示例教程 - 命令行中图形化显示提交日志</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+  <line x1="16" y1="2" x2="16" y2="6"/>
+  <line x1="8" y1="2" x2="8" y2="6"/>
+  <line x1="3" y1="10" x2="21" y2="10"/>
+  
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-10-29T17:17:17&#43;08:00'>2019, Oct 29</time>
+</span>
+
+  <span class='byline'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M21,21V20c0-2.76-4-5-9-5s-9,2.24-9,5v1"/>
+  <path d="M16,6.37A4,4,0,1,1,12.63,3,4,4,0,0,1,16,6.37Z"/>
+  
+</svg>
+<span class='screen-reader-text'> by </span><a href='/authors/wangyuntao'>wangyuntao</a></span>
+  
+<span class='reading-time'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <circle cx="12" cy="12" r="10"/>
+  <polyline points="12 6 12 12 15 15"/>
+  
+</svg>
+3 mins read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <p>相关命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 图形化显示当前分支的提交日志</span>
+git log --graph --oneline
+
+<span style="color:#75715e"># 图形化显示当前分支的提交日志及每次提交的变更内容</span>
+git log --graph --patch
+
+<span style="color:#75715e"># 图形化显示所有分支的提交日志</span>
+git log --graph --oneline --all
+
+<span style="color:#75715e"># 图形化显示所有分支的提交日志及每次提交的变更内容</span>
+git log --graph --patch --all</code></pre></div>
+<p>效果演示：</p>
+
+<p>我们先用下面的命令创建一个测试用的Git仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建一个空的Git仓库</span>
+mkdir repo <span style="color:#f92672">&amp;&amp;</span> cd repo <span style="color:#f92672">&amp;&amp;</span> git init
+
+<span style="color:#75715e"># master分支提交m1</span>
+echo m1 &gt; m1.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m m1
+
+<span style="color:#75715e"># b分支提交b1、b2</span>
+git checkout -b b
+echo b1 &gt; b1.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m b1
+echo b2 &gt; b2.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m b2
+
+<span style="color:#75715e"># 切换到master分支</span>
+git checkout master
+
+<span style="color:#75715e"># master分支提交m2</span>
+echo m2 &gt; m2.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m m2
+
+<span style="color:#75715e"># 合并b分支</span>
+git merge b --no-edit
+
+<span style="color:#75715e"># master分支提交m3、m4</span>
+echo m3 &gt; m3.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m m3
+echo m4 &gt; m4.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m m4
+
+<span style="color:#75715e"># b分支提交b3、b4</span>
+git checkout b
+echo b3 &gt; b3.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m b3
+echo b4 &gt; b4.txt <span style="color:#f92672">&amp;&amp;</span> git add . <span style="color:#f92672">&amp;&amp;</span> git commit -m b4
+
+<span style="color:#75715e"># 切换到master分支</span>
+git checkout master</code></pre></div>
+<p>先看下当前分支提交日志的图形化效果：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --graph --oneline
+* 1b95716 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> m4
+* <span style="color:#ae81ff">9629016</span> m3
+*   960ae54 Merge branch <span style="color:#e6db74">&#39;b&#39;</span>
+|<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>| * 5c4e7a0 b2
+| * 82e6569 b1
+* | cec7a59 m2
+|/
+* 3706b17 m1</code></pre></div>
+<p>再看下所有分支提交日志的图形化效果：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --graph --oneline --all
+* 85cf84a <span style="color:#f92672">(</span>b<span style="color:#f92672">)</span> b4
+* 6c72eb7 b3
+| * 1b95716 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> m4
+| * <span style="color:#ae81ff">9629016</span> m3
+| *   960ae54 Merge branch <span style="color:#e6db74">&#39;b&#39;</span>
+| |<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>| |/
+|/|
+* | 5c4e7a0 b2
+* | 82e6569 b1
+| * cec7a59 m2
+|/
+* 3706b17 m1</code></pre></div>
+<p>最后看下当前分支每次提交的变更内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --graph --patch
+* commit 1b9571692938cae69e4cb6f1c90195629b99ee14 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span>
+| Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+| Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+|
+|     m4
+|
+| diff --git a/m4.txt b/m4.txt
+| new file mode <span style="color:#ae81ff">100644</span>
+| index <span style="color:#ae81ff">0000000</span>..995fb87
+| --- /dev/null
+| +++ b/m4.txt
+| @@ -0,0 +1 @@
+| +m4
+|
+* commit 96290165e6cf0869a7cb5f74dd84596e5b156017
+| Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+| Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+|
+|     m3
+|
+| diff --git a/m3.txt b/m3.txt
+| new file mode <span style="color:#ae81ff">100644</span>
+| index <span style="color:#ae81ff">0000000</span>..e5c9ce9
+| --- /dev/null
+| +++ b/m3.txt
+| @@ -0,0 +1 @@
+| +m3
+|
+*   commit 960ae547f7751191c9d30e17eac2fbb85589d778
+|<span style="color:#ae81ff">\ </span> Merge: cec7a59 5c4e7a0
+| | Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+| | Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+| |
+| |     Merge branch <span style="color:#e6db74">&#39;b&#39;</span>
+| |
+| * commit 5c4e7a015a519e60134fe2d7895590a756887d4b
+| | Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+| | Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+| |
+| |     b2
+| |
+| | diff --git a/b2.txt b/b2.txt
+| | new file mode <span style="color:#ae81ff">100644</span>
+| | index <span style="color:#ae81ff">0000000</span>..e6bfff5
+| | --- /dev/null
+| | +++ b/b2.txt
+| | @@ -0,0 +1 @@
+| | +b2
+| |
+| * commit 82e6569460ce15d46b5f7d44fa4b68080bf952a6
+| | Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+| | Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+| |
+| |     b1
+| |
+| | diff --git a/b1.txt b/b1.txt
+| | new file mode <span style="color:#ae81ff">100644</span>
+| | index <span style="color:#ae81ff">0000000</span>..c9c6af7
+| | --- /dev/null
+| | +++ b/b1.txt
+| | @@ -0,0 +1 @@
+| | +b1
+| |
+* | commit cec7a592810edb921e602c214881e3e8d37bb449
+|/  Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+|   Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+|
+|       m2
+|
+|   diff --git a/m2.txt b/m2.txt
+|   new file mode <span style="color:#ae81ff">100644</span>
+|   index <span style="color:#ae81ff">0000000</span>..08bb233
+|   --- /dev/null
+|   +++ b/m2.txt
+|   @@ -0,0 +1 @@
+|   +m2
+|
+* commit 3706b17072a7eb78f8093b36774c63fbcd9dc106
+  Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+  Date:   Tue Oct <span style="color:#ae81ff">29</span> <span style="color:#ae81ff">17</span>:58:06 <span style="color:#ae81ff">2019</span> +0800
+
+      m1
+
+  diff --git a/m1.txt b/m1.txt
+  new file mode <span style="color:#ae81ff">100644</span>
+  index <span style="color:#ae81ff">0000000</span>..63a911f
+  --- /dev/null
+  +++ b/m1.txt
+  @@ -0,0 +1 @@
+  +m1</code></pre></div>
+<p>以上命令是不是比直接用git log命令直观多了呢？</p>
+
+<p>好了，命令行中图形化显示提交日志的内容到这里就结束了，希望对你有所帮助。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
+  
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/'>Git示例教程</a></div>
+<div class='tags'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z"/>
+  <line x1="7" y1="7" x2="7" y2="7"/>
+  
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/git/'>Git</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/posts/git/branch_sync/'>
+        <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="20" y1="12" x2="4" y2="12"/>
+  <polyline points="10 18 4 12 10 6"/>
+  
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 同步本地分支的添加删除状态到远程（或反之）</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/wangyuntao' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+  
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/wangyuntao' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+  
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:wyt.daily@gmail.com' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Contact via Email</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+  <polyline points="22,6 12,13 2,6"/>
+  
+</svg>
+</a>
+      </li><li>
+        <a href='https://gitlab.com/wangyuntao' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Open Gitlab account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"/>
+  
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2017-2019 wangyuntao </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.67d669ac.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+
