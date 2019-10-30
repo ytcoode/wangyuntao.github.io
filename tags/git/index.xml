@@ -5,10 +5,24 @@
     <link>http://www.example.com/tags/git/</link>
     <description>Recent content in Git on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Tue, 29 Oct 2019 22:34:07 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 30 Oct 2019 18:02:21 +0800</lastBuildDate>
     
 	<atom:link href="http://www.example.com/tags/git/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Git示例教程 - 灵活使用git diff命令</title>
+      <link>http://www.example.com/posts/git/diff/</link>
+      <pubDate>Wed, 30 Oct 2019 18:02:21 +0800</pubDate>
+      
+      <guid>http://www.example.com/posts/git/diff/</guid>
+      <description>相关命令：
+# 比较当前工作区和Git的staging area里内容的区别 git diff # 比较Git的staging area和当前分支指向内容的区别 git diff --staged # 比较任意两次提交指向内容的区别 git diff &amp;lt;commit&amp;gt; &amp;lt;commit&amp;gt; 情景模拟：
+先执行下面的命令，创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 提交一次 echo a1 &amp;gt; a.txt git add . git commit -m &amp;#34;Initial commit&amp;#34; 然后再执行下面的命令，对a.txt文件做一些修改：
+echo a2 &amp;gt; a.txt 最后我们执行两次diff命令（参数不一样），看下输出有什么不同：
+$ git -P diff # 参数-P可以不管，下同 diff --git a/a.txt b/a.txt index da0f8ed..c1827f0 100644 --- a/a.txt +++ b/a.txt @@ -1 +1 @@ -a1 +a2 $ git -P diff --staged # 没有任何输出 由上可见，没有&amp;ndash;staged参数的diff命令输出了文件变化，而有&amp;ndash;staged参数的diff命令没有任何输出，即表示没有任何变化。</description>
+    </item>
     
     <item>
       <title>Git示例教程 - 命令别名</title>

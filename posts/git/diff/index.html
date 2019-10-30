@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang='en'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='相关命令：
+# 比较当前工作区和Git的staging area里内容的区别 git diff # 比较Git的staging area和当前分支指向内容的区别 git diff --staged # 比较任意两次提交指向内容的区别 git diff &lt;commit&gt; &lt;commit&gt; 情景模拟：
+先执行下面的命令，创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 提交一次 echo a1 &gt; a.txt git add . git commit -m &#34;Initial commit&#34; 然后再执行下面的命令，对a.txt文件做一些修改：
+echo a2 &gt; a.txt 最后我们执行两次diff命令（参数不一样），看下输出有什么不同：
+$ git -P diff # 参数-P可以不管，下同 diff --git a/a.txt b/a.txt index da0f8ed..c1827f0 100644 --- a/a.txt &#43;&#43;&#43; b/a.txt @@ -1 &#43;1 @@ -a1 &#43;a2 $ git -P diff --staged # 没有任何输出 由上可见，没有&ndash;staged参数的diff命令输出了文件变化，而有&ndash;staged参数的diff命令没有任何输出，即表示没有任何变化。'>
+<meta name='theme-color' content='#ffcd00'>
+
+<meta property='og:title' content='Git示例教程 - 灵活使用git diff命令 • wangyuntao'>
+<meta property='og:description' content='相关命令：
+# 比较当前工作区和Git的staging area里内容的区别 git diff # 比较Git的staging area和当前分支指向内容的区别 git diff --staged # 比较任意两次提交指向内容的区别 git diff &lt;commit&gt; &lt;commit&gt; 情景模拟：
+先执行下面的命令，创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 提交一次 echo a1 &gt; a.txt git add . git commit -m &#34;Initial commit&#34; 然后再执行下面的命令，对a.txt文件做一些修改：
+echo a2 &gt; a.txt 最后我们执行两次diff命令（参数不一样），看下输出有什么不同：
+$ git -P diff # 参数-P可以不管，下同 diff --git a/a.txt b/a.txt index da0f8ed..c1827f0 100644 --- a/a.txt &#43;&#43;&#43; b/a.txt @@ -1 &#43;1 @@ -a1 &#43;a2 $ git -P diff --staged # 没有任何输出 由上可见，没有&ndash;staged参数的diff命令输出了文件变化，而有&ndash;staged参数的diff命令没有任何输出，即表示没有任何变化。'>
+<meta property='og:url' content='http://www.example.com/posts/git/diff/'>
+<meta property='og:site_name' content='技术闲聊'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-30T18:02:21&#43;08:00'/><meta property='article:modified_time' content='2019-10-30T18:02:21&#43;08:00'/><meta name='twitter:card' content='summary'>
+
+<meta name="generator" content="Hugo 0.59.0" />
+
+  <title>Git示例教程 - 灵活使用git diff命令 • wangyuntao</title>
+  <link rel='canonical' href='http://www.example.com/posts/git/diff/'>
+  
+  
+  <link rel='icon' href='/favicon.ico'>
+<link rel='stylesheet' href='/assets/css/main.6a060eb7.css'><link rel='stylesheet' href='/css/custom.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
+
+  
+
+</head>
+<body class='page type-posts has-sidebar'>
+
+  <div class='site'><div id='sidebar' class='sidebar'>
+  <a class='screen-reader-text' href='#main-menu'>Skip to Main Menu</a>
+
+  <div class='container'><section class='widget widget-about sep-after'>
+  <header>
+    
+    <div class='logo'>
+      <a href='/'>
+        <img src='/images/logo.png'>
+      </a>
+    </div>
+    
+    <h2 class='title site-title '>
+      <a href='/'>
+      技术闲聊
+      </a>
+    </h2>
+    <div class='desc'>
+    聊聊技术的那些事
+    </div>
+  </header>
+
+</section>
+<section class='widget widget-search sep-after'>
+  <header>
+    <h4 class='title widget-title'>Search</h4>
+  </header>
+
+  <form action='/search' id='search-form' class='search-form'>
+    <label>
+      <span class='screen-reader-text'>Search</span>
+      <input id='search-term' class='search-term' type='search' name='q' placeholder='Search&hellip;'>
+    </label></form>
+
+</section>
+<section class='widget widget-sidebar_menu sep-after'><nav id='sidebar-menu' class='menu sidebar-menu' aria-label='Sidebar Menu'>
+    <div class='container'>
+      <ul><li class='item'>
+  <a href='/posts/'>文章</a></li><li class='item'>
+  <a href='/%E5%85%B3%E4%BA%8E/'>关于</a></li></ul>
+    </div>
+  </nav>
+
+</section><section class='widget widget-taxonomy_cloud sep-after'>
+  <header>
+    <h4 class='title widget-title'>Tags</h4>
+  </header>
+
+  <div class='container list-container'>
+  <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/git/' style='font-size:1em'>Git</a>
+      </li></ul>
+</div>
+
+
+</section>
+</div>
+
+  <div class='sidebar-overlay'></div>
+</div><div class='main'><a class='screen-reader-text' href='#content'>Skip to Content</a>
+
+<button id='sidebar-toggler' class='sidebar-toggler' aria-controls='sidebar'>
+  <span class='screen-reader-text'>Toggle Sidebar</span>
+  <span class='open'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="3" y1="12" x2="21" y2="12" />
+  <line x1="3" y1="6" x2="21" y2="6" />
+  <line x1="3" y1="18" x2="21" y2="18" />
+  
+</svg>
+</span>
+  <span class='close'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="18" y1="6" x2="6" y2="18" />
+  <line x1="6" y1="6" x2="18" y2="18" />
+  
+</svg>
+</span>
+</button><div class='header-widgets'>
+        <div class='container'>
+    
+    <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
+  <section class='widget widget-breadcrumbs sep-after'>
+    <nav id='breadcrumbs'>
+      <ol><li><a href='/'>&gt; </a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 灵活使用git diff命令</span></li></ol>
+    </nav>
+  </section></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>技术闲聊</p><p class='desc site-desc'>聊聊技术的那些事</p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Git示例教程 - 灵活使用git diff命令</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+  <line x1="16" y1="2" x2="16" y2="6"/>
+  <line x1="8" y1="2" x2="8" y2="6"/>
+  <line x1="3" y1="10" x2="21" y2="10"/>
+  
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-10-30T18:02:21&#43;08:00'>2019, Oct 30</time>
+</span>
+
+  <span class='byline'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M21,21V20c0-2.76-4-5-9-5s-9,2.24-9,5v1"/>
+  <path d="M16,6.37A4,4,0,1,1,12.63,3,4,4,0,0,1,16,6.37Z"/>
+  
+</svg>
+<span class='screen-reader-text'> by </span><a href='/authors/wangyuntao'>wangyuntao</a></span>
+  
+<span class='reading-time'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <circle cx="12" cy="12" r="10"/>
+  <polyline points="12 6 12 12 15 15"/>
+  
+</svg>
+2 mins read
+</span>
+
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <p>相关命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 比较当前工作区和Git的staging area里内容的区别</span>
+git diff
+
+<span style="color:#75715e"># 比较Git的staging area和当前分支指向内容的区别</span>
+git diff --staged
+
+<span style="color:#75715e"># 比较任意两次提交指向内容的区别</span>
+git diff &lt;commit&gt; &lt;commit&gt;</code></pre></div>
+<p>情景模拟：</p>
+
+<p>先执行下面的命令，创建一个测试用的Git仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建一个空的Git仓库</span>
+mkdir repo
+cd repo
+git init
+
+<span style="color:#75715e"># 提交一次</span>
+echo a1 &gt; a.txt
+git add .
+git commit -m <span style="color:#e6db74">&#34;Initial commit&#34;</span></code></pre></div>
+<p>然后再执行下面的命令，对a.txt文件做一些修改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">echo a2 &gt; a.txt</code></pre></div>
+<p>最后我们执行两次diff命令（参数不一样），看下输出有什么不同：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P diff <span style="color:#75715e"># 参数-P可以不管，下同</span>
+diff --git a/a.txt b/a.txt
+index da0f8ed..c1827f0 <span style="color:#ae81ff">100644</span>
+--- a/a.txt
++++ b/a.txt
+@@ -1 +1 @@
+-a1
++a2
+
+$ git -P diff --staged <span style="color:#75715e"># 没有任何输出</span></code></pre></div>
+<p>由上可见，没有&ndash;staged参数的diff命令输出了文件变化，而有&ndash;staged参数的diff命令没有任何输出，即表示没有任何变化。</p>
+
+<p>这是因为，没有&ndash;staged参数的diff命令比较的是工作区和Git的staging area里的内容的区别，因为我们上面修改了a.txt文件，即工作区里的内容变化了，但此时Git的staging area里的内容并没有任何变化，即还是原内容，所以该次diff命令就正确输出了我们对a.txt文件的修改。</p>
+
+<p>而有&ndash;staged参数的diff命令比较的是Git的staging area和当前分支指向的内容的区别，因为此时这两个地方的内容都没有变化，所以该次diff命令没有任何输出。</p>
+
+<p>我们再执行下面的命令，看下这次不同的diff命令有怎样的输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git add a.txt <span style="color:#75715e"># 将a.txt的修改提交到Git的staging area</span>
+$ git -P diff   <span style="color:#75715e"># 没有任何输出</span>
+$ git -P diff --staged
+diff --git a/a.txt b/a.txt
+index da0f8ed..c1827f0 <span style="color:#ae81ff">100644</span>
+--- a/a.txt
++++ b/a.txt
+@@ -1 +1 @@
+-a1
++a2</code></pre></div>
+<p>这次的结果正好反过来了，有&ndash;staged参数的diff命令有输出，而没有&ndash;staged参数的diff命令没有输出。</p>
+
+<p>这是因为通过上面的git add命令，工作区里的文件内容已经同步到了Git的staging area里，所以此时这两个地方的文件内容是一样的，这样就导致了第一次diff命令没有任何输出。</p>
+
+<p>但正是因为这次同步导致的Git的staging area里的内容变化，使其和当前分支指向的内容不再相同（当前分支指向的还是原内容），所以有第二次diff命令就有了输出。</p>
+
+<p>继续上面的例子，我们再执行下面的命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git commit -m <span style="color:#ae81ff">1</span>
+<span style="color:#f92672">[</span>master 867736c<span style="color:#f92672">]</span> <span style="color:#ae81ff">1</span>
+ <span style="color:#ae81ff">1</span> file changed, <span style="color:#ae81ff">1</span> insertion<span style="color:#f92672">(</span>+<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> deletion<span style="color:#f92672">(</span>-<span style="color:#f92672">)</span>
+ 
+$ git -P diff          <span style="color:#75715e"># 无任何输出</span>
+$ git -P diff --staged <span style="color:#75715e"># 无任何输出</span></code></pre></div>
+<p>因为这次先执行了git commit命令，导致staging area里的内容被同步到了Git仓库里，所以这两次diff命令都没有任何输出。</p>
+
+<p>注意，我们在描述git add和git commit命令时，用的都是同步文件内容到下一个区域，而不是添加这次的修改到下一个区域，这个概念是很重要的。</p>
+
+<p>Git在进行版本管理时，保存文件的地方分为三个区域，分别是工作区、staging area 和 Git仓库，我们要把这三个区域都想像成各自保存了所有文件的一份拷贝，而不是存放的一次次提交的零散的变化。</p>
+
+<p>当我们修改文件时，我们改动的是工作区里的内容。</p>
+
+<p>当我们执行git add命令时，我们是把对工作区的修改同步到了staging area里，使其当前内容和工作区内容相同。</p>
+
+<p>当我们执行git commit命令时，我们是把staging area里变动的部分同步到了Git仓库里，使Git仓库里的内容和工作区以及staging area里的内容都相同。</p>
+
+<p>所有命令的执行，目的都是将上一区域里变化的内容同步到下一区域，使这两个区域之间的内容完全相同。</p>
+
+<p>用这种方式思考Git的版本管理机制，对于我们日后理解Git的各种命令有非常大的帮助。</p>
+
+<p>话题太大，这里就不再展开了。</p>
+
+<p>最后我们再来看下不同提交之间的比较是什么样子的。</p>
+
+<p>我们先在当前Git仓库的基础上继续执行下面的命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建并切换到分支b</span>
+git checkout -b b
+
+<span style="color:#75715e"># 在分支b上连续提交两次</span>
+echo b1 &gt; a.txt <span style="color:#f92672">&amp;&amp;</span> git commit -am b1
+echo b2 &gt;&gt; a.txt <span style="color:#f92672">&amp;&amp;</span> git commit -am b2
+
+<span style="color:#75715e"># 切换回master分支</span>
+git checkout -
+
+<span style="color:#75715e"># 在master分支上再连续提交两次</span>
+echo m1 &gt; a.txt <span style="color:#f92672">&amp;&amp;</span>  git commit -am m1
+echo m2 &gt;&gt; a.txt <span style="color:#f92672">&amp;&amp;</span> git commit -am m2</code></pre></div>
+<p>执行完上述命令后，我们用下面的命令比较下当前b分支和master分支的区别：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P diff master b
+diff --git a/a.txt b/a.txt
+index b5692e5..9b89cd5 <span style="color:#ae81ff">100644</span>
+--- a/a.txt
++++ b/a.txt
+@@ -1,2 +1,2 @@
+-m1
+-m2
++b1
++b2</code></pre></div>
+<p>看到了吧，这次的diff命令清晰的显示了两个分支对a.txt做的修改，以及他们导致的冲突。</p>
+
+<p>该命令在分支合并时是非常有用的，我们可以使用该命令在合并前看下被合并分支对当前分支的文件内容做了哪些修改。</p>
+
+<p>git diff命令还有很多更好玩和更加强大的执行方式，限于篇幅原因，这里就不一一指出了，有兴趣的同学可以看下Git自带的文档，执行 <code>git help diff</code> 就可以看到了。</p>
+
+<p>完。</p>
+
+</div>
+
+  
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
+  
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/'>Git示例教程</a></div>
+<div class='tags'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z"/>
+  <line x1="7" y1="7" x2="7" y2="7"/>
+  
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/git/'>Git</a></div>
+
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/posts/git/command_alias/'>
+        <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <line x1="20" y1="12" x2="4" y2="12"/>
+  <polyline points="10 18 4 12 10 6"/>
+  
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 命令别名</a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><section class='widget widget-social_menu sep-after'><nav aria-label='Social Menu'>
+    <ul><li>
+        <a href='https://github.com/wangyuntao' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Open Github account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+  
+</svg>
+</a>
+      </li><li>
+        <a href='https://twitter.com/wangyuntao' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Open Twitter account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+  
+</svg>
+</a>
+      </li><li>
+        <a href='mailto:wyt.daily@gmail.com' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Contact via Email</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+  <polyline points="22,6 12,13 2,6"/>
+  
+</svg>
+</a>
+      </li><li>
+        <a href='https://gitlab.com/wangyuntao' target='_blank' rel='noopener'>
+          <span class='screen-reader-text'>Open Gitlab account in new tab</span><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+  
+  <path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 0 1-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 0 1 4.82 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0 1 18.6 2a.43.43 0 0 1 .58 0 .42.42 0 0 1 .11.18l2.44 7.51L23 13.45a.84.84 0 0 1-.35.94z"/>
+  
+</svg>
+</a>
+      </li></ul>
+  </nav>
+</section><div class='copyright'>
+  <p> &copy; 2017-2019 wangyuntao </p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/assets/js/"</script>
+
+<script src='/assets/js/main.67d669ac.js'></script><script src='/js/custom.js'></script>
+
+</body>
+
+</html>
+
