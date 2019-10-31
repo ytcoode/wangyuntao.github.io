@@ -4,7 +4,7 @@
   
   <url>
     <loc>http://www.example.com/posts/</loc>
-    <lastmod>2019-10-30T18:02:21+08:00</lastmod>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
@@ -13,17 +13,42 @@
   
   <url>
     <loc>http://www.example.com/</loc>
-    <lastmod>2019-10-30T18:02:21+08:00</lastmod>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://www.example.com/authors/</loc>
-    <lastmod>2019-10-30T18:02:21+08:00</lastmod>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
     <loc>http://www.example.com/categories/</loc>
-    <lastmod>2019-10-30T18:02:21+08:00</lastmod>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/tags/linux/</loc>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/categories/linux%E7%B3%BB%E7%BB%9F%E7%A0%94%E7%A9%B6/</loc>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</loc>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/tags/</loc>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.example.com/authors/wangyuntao/</loc>
+    <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
@@ -38,16 +63,6 @@
   
   <url>
     <loc>http://www.example.com/posts/git/diff/</loc>
-    <lastmod>2019-10-30T18:02:21+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.example.com/tags/</loc>
-    <lastmod>2019-10-30T18:02:21+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.example.com/authors/wangyuntao/</loc>
     <lastmod>2019-10-30T18:02:21+08:00</lastmod>
   </url>
   
