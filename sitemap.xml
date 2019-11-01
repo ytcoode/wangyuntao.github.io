@@ -3,124 +3,124 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://www.example.com/posts/</loc>
+    <loc>https://ytcode.io/posts/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/%E5%85%B3%E4%BA%8E/</loc>
+    <loc>https://ytcode.io/%E5%85%B3%E4%BA%8E/</loc>
   </url>
   
   <url>
-    <loc>http://www.example.com/</loc>
+    <loc>https://ytcode.io/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/authors/</loc>
+    <loc>https://ytcode.io/authors/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/categories/</loc>
+    <loc>https://ytcode.io/categories/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/tags/linux/</loc>
+    <loc>https://ytcode.io/tags/linux/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/categories/linux%E7%B3%BB%E7%BB%9F%E7%A0%94%E7%A9%B6/</loc>
+    <loc>https://ytcode.io/categories/linux%E7%B3%BB%E7%BB%9F%E7%A0%94%E7%A9%B6/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</loc>
+    <loc>https://ytcode.io/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/tags/</loc>
+    <loc>https://ytcode.io/tags/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/authors/wangyuntao/</loc>
+    <loc>https://ytcode.io/authors/wangyuntao/</loc>
     <lastmod>2019-10-31T14:16:49+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/tags/git/</loc>
+    <loc>https://ytcode.io/tags/git/</loc>
     <lastmod>2019-10-30T18:02:21+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/</loc>
+    <loc>https://ytcode.io/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2019-10-30T18:02:21+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/diff/</loc>
+    <loc>https://ytcode.io/posts/git/diff/</loc>
     <lastmod>2019-10-30T18:02:21+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/command_alias/</loc>
+    <loc>https://ytcode.io/posts/git/command_alias/</loc>
     <lastmod>2019-10-29T22:34:07+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/log_graph/</loc>
+    <loc>https://ytcode.io/posts/git/log_graph/</loc>
     <lastmod>2019-10-29T17:17:17+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/branch_sync/</loc>
+    <loc>https://ytcode.io/posts/git/branch_sync/</loc>
     <lastmod>2019-10-28T23:02:27+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/delete_branch/</loc>
+    <loc>https://ytcode.io/posts/git/delete_branch/</loc>
     <lastmod>2019-10-28T23:02:22+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/create_branch/</loc>
+    <loc>https://ytcode.io/posts/git/create_branch/</loc>
     <lastmod>2019-10-28T23:02:21+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/modify_last_commit/</loc>
+    <loc>https://ytcode.io/posts/git/modify_last_commit/</loc>
     <lastmod>2019-10-28T23:02:20+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/undo_last_commit/</loc>
+    <loc>https://ytcode.io/posts/git/undo_last_commit/</loc>
     <lastmod>2019-10-27T18:02:27+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/undo_changes_to_one_file/</loc>
+    <loc>https://ytcode.io/posts/git/undo_changes_to_one_file/</loc>
     <lastmod>2019-10-27T18:02:27+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/posts/git/undo_changes_to_all_files/</loc>
+    <loc>https://ytcode.io/posts/git/undo_changes_to_all_files/</loc>
     <lastmod>2019-10-27T18:02:27+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.example.com/page/</loc>
+    <loc>https://ytcode.io/page/</loc>
   </url>
   
   <url>
-    <loc>http://www.example.com/search/</loc>
+    <loc>https://ytcode.io/search/</loc>
   </url>
   
   <url>
-    <loc>http://www.example.com/series/</loc>
+    <loc>https://ytcode.io/series/</loc>
   </url>
   
 </urlset>

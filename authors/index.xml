@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Authors on 技术闲聊</title>
-    <link>http://www.example.com/authors/</link>
+    <link>https://ytcode.io/authors/</link>
     <description>Recent content in Authors on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Thu, 31 Oct 2019 14:16:49 +0800</lastBuildDate>
     
-	<atom:link href="http://www.example.com/authors/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ytcode.io/authors/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>wangyuntao</title>
-      <link>http://www.example.com/authors/wangyuntao/</link>
+      <link>https://ytcode.io/authors/wangyuntao/</link>
       <pubDate>Thu, 31 Oct 2019 14:16:49 +0800</pubDate>
       
-      <guid>http://www.example.com/authors/wangyuntao/</guid>
+      <guid>https://ytcode.io/authors/wangyuntao/</guid>
       <description></description>
     </item>
     

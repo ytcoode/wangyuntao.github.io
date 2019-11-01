@@ -17,14 +17,14 @@ git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard
 # 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
 $ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
 $ git reset HEAD^ Unstaged changes after reset: M a.'>
-<meta property='og:url' content='http://www.example.com/posts/git/undo_last_commit/'>
+<meta property='og:url' content='https://ytcode.io/posts/git/undo_last_commit/'>
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.0" />
 
   <title>Git示例教程 - 撤销上次提交 • wangyuntao</title>
-  <link rel='canonical' href='http://www.example.com/posts/git/undo_last_commit/'>
+  <link rel='canonical' href='https://ytcode.io/posts/git/undo_last_commit/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -275,7 +275,7 @@ A2</code></pre></div>
 <section id='comments' class='comments'>
   <div class='container sep-before'>
     <div class='comments-area'><script src='https://utteranc.es/client.js'
-  repo='wangyuntao/wangyuntao.github.io' issue-term='pathname'
+  repo='wangyuntao/wangyuntao.github.io' issue-term='title'
   crossorigin='anonymous' async>
 </script>
 </div>

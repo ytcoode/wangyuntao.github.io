@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>wangyuntao on 技术闲聊</title>
-    <link>http://www.example.com/authors/wangyuntao/</link>
+    <link>https://ytcode.io/authors/wangyuntao/</link>
     <description>Recent content in wangyuntao on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Thu, 31 Oct 2019 14:16:49 +0800</lastBuildDate>
     
-	<atom:link href="http://www.example.com/authors/wangyuntao/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ytcode.io/authors/wangyuntao/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Linux系统研究 - 操作系统是如何管理tcp连接的</title>
-      <link>http://www.example.com/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</link>
+      <link>https://ytcode.io/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</link>
       <pubDate>Thu, 31 Oct 2019 14:16:49 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</guid>
+      <guid>https://ytcode.io/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</guid>
       <description>首先，在linux内核的网络模块里维护着一个全局实例，用来存储所有和tcp相关的socket：
 // net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket类型的不同，划分成四个hashtable：
 // include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是正在建立连接或已经建立连接的socket  // 比如，当内核收到一个tcp消息时，它先从消息头里读出地址和端口等信息  // 然后用该信息到ehash里获取对应的socket  // 最后把剩余的tcp数据添加到该socket的recv buf中供用户程序读取  struct inet_ehash_bucket *ehash; // key是本地端口  // value是使用这个端口的所有socket  // 比如，当我们用socket监听一个端口时，该socket就在bhash里  // 同理，由该监听端口建立的连接对应的那些socket也在这里  // 因为它们也都是使用同样的本地端口  struct inet_bind_hashbucket *bhash; // key是本地地址和端口组成的二元组  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 在系统启动时，这个全局的tcp_hashinfo实例会在下面的方法中被初始化：
@@ -24,10 +24,10 @@
     
     <item>
       <title>Git示例教程 - 灵活使用git diff命令</title>
-      <link>http://www.example.com/posts/git/diff/</link>
+      <link>https://ytcode.io/posts/git/diff/</link>
       <pubDate>Wed, 30 Oct 2019 18:02:21 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/diff/</guid>
+      <guid>https://ytcode.io/posts/git/diff/</guid>
       <description>相关命令：
 # 比较当前工作区和Git的staging area里内容的区别 git diff # 比较Git的staging area和当前分支指向内容的区别 git diff --staged # 比较任意两次提交指向内容的区别 git diff &amp;lt;commit&amp;gt; &amp;lt;commit&amp;gt; 情景模拟：
 先执行下面的命令，创建一个测试用的Git仓库：
@@ -38,10 +38,10 @@ $ git -P diff # 参数-P可以不管，下同 diff --git a/a.txt b/a.txt index d
     
     <item>
       <title>Git示例教程 - 命令别名</title>
-      <link>http://www.example.com/posts/git/command_alias/</link>
+      <link>https://ytcode.io/posts/git/command_alias/</link>
       <pubDate>Tue, 29 Oct 2019 22:34:07 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/command_alias/</guid>
+      <guid>https://ytcode.io/posts/git/command_alias/</guid>
       <description>相关命令：
 git config --global alias.别名 别名代表的真正命令 对于那些经常使用的，或者是特别复杂的Git命令，我们可以为其设置别名，这样在我们想要执行对应的Git命令时，只要执行这个别名命令就好了，简单方便。
 下面来演示下。
@@ -51,10 +51,10 @@ $ git log --graph --oneline * 8005803a2ca0 (HEAD -&amp;gt; master, origin/master
     
     <item>
       <title>Git示例教程 - 命令行中图形化显示提交日志</title>
-      <link>http://www.example.com/posts/git/log_graph/</link>
+      <link>https://ytcode.io/posts/git/log_graph/</link>
       <pubDate>Tue, 29 Oct 2019 17:17:17 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/log_graph/</guid>
+      <guid>https://ytcode.io/posts/git/log_graph/</guid>
       <description>相关命令：
 # 图形化显示当前分支的提交日志 git log --graph --oneline # 图形化显示当前分支的提交日志及每次提交的变更内容 git log --graph --patch # 图形化显示所有分支的提交日志 git log --graph --oneline --all # 图形化显示所有分支的提交日志及每次提交的变更内容 git log --graph --patch --all 效果演示：
 我们先用下面的命令创建一个测试用的Git仓库：
@@ -63,10 +63,10 @@ $ git log --graph --oneline * 8005803a2ca0 (HEAD -&amp;gt; master, origin/master
     
     <item>
       <title>Git示例教程 - 同步本地分支的添加删除状态到远程（或反之）</title>
-      <link>http://www.example.com/posts/git/branch_sync/</link>
+      <link>https://ytcode.io/posts/git/branch_sync/</link>
       <pubDate>Mon, 28 Oct 2019 23:02:27 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/branch_sync/</guid>
+      <guid>https://ytcode.io/posts/git/branch_sync/</guid>
       <description>相关命令：
 # 遍历本地仓库中的所有分支，如果该分支在远程仓库中不存在，则在远程仓库中创建该分支 # 遍历远程仓库中的所有分支，如果该分支在本地仓库中不存在，则在远程仓库中删除该分支 git push --all --prune # 遍历远程仓库中的所有分支，如果该分支在本地仓库中没有对应的远程追踪分支，则在本地仓库中创建该分支 # 遍历本地仓库中的所有远程追踪分支，如果该分支在远程仓库中没有对应的分支，则将其删除 git fetch --prune 情景模拟：
 为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，之后，我们再用相应的命令创建一个测试分支，并将其同步到远端，具体命令如下：
@@ -76,10 +76,10 @@ $ git clone https://github.com/wangyuntao/git-test-repo.git repo2 # 省略输出
     
     <item>
       <title>Git示例教程 - 删除本地分支及远程分支</title>
-      <link>http://www.example.com/posts/git/delete_branch/</link>
+      <link>https://ytcode.io/posts/git/delete_branch/</link>
       <pubDate>Mon, 28 Oct 2019 23:02:22 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/delete_branch/</guid>
+      <guid>https://ytcode.io/posts/git/delete_branch/</guid>
       <description>相关命令：
 git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
 为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
@@ -90,10 +90,10 @@ $ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P br
     
     <item>
       <title>Git示例教程 - 创建本地分支及远程分支</title>
-      <link>http://www.example.com/posts/git/create_branch/</link>
+      <link>https://ytcode.io/posts/git/create_branch/</link>
       <pubDate>Mon, 28 Oct 2019 23:02:21 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/create_branch/</guid>
+      <guid>https://ytcode.io/posts/git/create_branch/</guid>
       <description>相关命令：
 git branch 新分支名 # 基于当前分支创建一个新分支 git push --set-upstream origin 新分支名 # 将新分支推送到远端 情景模拟：
 为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
@@ -104,10 +104,10 @@ $ git branch b1 # 创建分支b1 $ git -P branch -avv # 查看当前分支情况
     
     <item>
       <title>Git示例教程 - 修改上次提交</title>
-      <link>http://www.example.com/posts/git/modify_last_commit/</link>
+      <link>https://ytcode.io/posts/git/modify_last_commit/</link>
       <pubDate>Mon, 28 Oct 2019 23:02:20 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/modify_last_commit/</guid>
+      <guid>https://ytcode.io/posts/git/modify_last_commit/</guid>
       <description>如果只是修改上次提交的日志，可以直接使用下面的命令：
 git commit --amend -m 新的提交日志 如果上次提交的内容有误或者不全，想要修改上次提交中文件的内容，或是添加新的文件，可以执行下面的命令：
 # 先修改对应的文件 # git add 修改的文件或新文件 # 执行下面的命令，将这次修改的内容合并到上次提交 git commit --amend --no-edit 情景模拟：
@@ -118,10 +118,10 @@ $ git commit --amend -m 正确的日志 [master e80dc2f] 正确的日志 Date: W
     
     <item>
       <title>Git示例教程 - 撤销上次提交</title>
-      <link>http://www.example.com/posts/git/undo_last_commit/</link>
+      <link>https://ytcode.io/posts/git/undo_last_commit/</link>
       <pubDate>Sun, 27 Oct 2019 18:02:27 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/undo_last_commit/</guid>
+      <guid>https://ytcode.io/posts/git/undo_last_commit/</guid>
       <description>最终命令：
 git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
 先使用下面的命令初始化一个测试用的Git仓库：
@@ -132,10 +132,10 @@ $ git reset HEAD^ Unstaged changes after reset: M a.</description>
     
     <item>
       <title>Git示例教程 - 撤销对单个文件的修改</title>
-      <link>http://www.example.com/posts/git/undo_changes_to_one_file/</link>
+      <link>https://ytcode.io/posts/git/undo_changes_to_one_file/</link>
       <pubDate>Sun, 27 Oct 2019 18:02:27 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/undo_changes_to_one_file/</guid>
+      <guid>https://ytcode.io/posts/git/undo_changes_to_one_file/</guid>
       <description>最终命令：
 git checkout HEAD a.txt # 撤销对a.txt文件的修改 git restore --source=HEAD --staged --worktree a.txt # 也可以使用这个命令 情景模拟：
 先使用下面的命令初始化一个测试用的Git仓库：
@@ -145,10 +145,10 @@ $ git status On branch master Changes to be committed: (use &amp;#34;git restore
     
     <item>
       <title>Git示例教程 - 撤销对所有文件的修改</title>
-      <link>http://www.example.com/posts/git/undo_changes_to_all_files/</link>
+      <link>https://ytcode.io/posts/git/undo_changes_to_all_files/</link>
       <pubDate>Sun, 27 Oct 2019 18:02:27 +0800</pubDate>
       
-      <guid>http://www.example.com/posts/git/undo_changes_to_all_files/</guid>
+      <guid>https://ytcode.io/posts/git/undo_changes_to_all_files/</guid>
       <description>最终命令：
 $ git reset --hard # 撤销所有文件的修改（不算未进入版本控制的文件） $ git clean -fd # 删除所有未进入版本控制的文件 下面用一个例子展示下这两个命令的使用。
 先用下面的命令初始化一个测试用的Git仓库：
