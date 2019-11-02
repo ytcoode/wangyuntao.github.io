@@ -3,16 +3,14 @@
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta name='description' content='首先，在linux内核的网络模块里维护着一个全局实例，用来存储所有和tcp相关的socket：
-// net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket类型的不同，划分成四个hashtable：
-// include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是正在建立连接或已经建立连接的socket  // 比如，当内核收到一个tcp消息时，它先从消息头里读出地址和端口等信息  // 然后用该信息到ehash里获取对应的socket  // 最后把剩余的tcp数据添加到该socket的recv buf中供用户程序读取  struct inet_ehash_bucket *ehash; // key是本地端口  // value是使用这个端口的所有socket  // 比如，当我们用socket监听一个端口时，该socket就在bhash里  // 同理，由该监听端口建立的连接对应的那些socket也在这里  // 因为它们也都是使用同样的本地端口  struct inet_bind_hashbucket *bhash; // key是本地地址和端口组成的二元组  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 在系统启动时，这个全局的tcp_hashinfo实例会在下面的方法中被初始化：
-// net/ipv4/tcp.'>
+// net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket用途的不同，划分成四个hashtable：
+// include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是想要进行tcp通信的所有socket  // 比如正在建立连接的socket，正在传输数据的socket，以及正在关闭连接的socket  // 当内核收到一个tcp消息时，会先提取tcp消息头中的远程及本地的地址端口信息  // 然后以该信息作为key，在ehash中找对应的socket，如果该socket存在  // 则根据这个socket的当期状态以及tcp消息的内容，对该socket做后续的逻辑处理  struct inet_ehash_bucket *ehash; // key是本地端口  // value是一个集合对象，里面存放着所有正在使用该端口的socket  // 比如监听着某个端口的服务端socket  // 比如通过某个监听端口建立tcp连接的对应的本地socket（该socket和监听socket使用同样的本地端口）  // 该hashtable的作用是为了查找某个端口是否可以被使用  // 比如在我们执行bind操作时  // 比如在我们调用connect方法，操作系统帮我们挑选本地端口时  struct inet_bind_hashbucket *bhash; // key是由本地地址和本地端口组成的二元组  // value是对应的处于监听状态中的socket  // 该hashtable的作用是，当内核收到建立tcp连接请求时  // 可以从这里快速的查找到对应的服务端监听socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于监听状态中的socket  // 由于该hashtable在tcp的主体逻辑中并不会被大量使用  // 所以下文不会过多介绍  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 由上可见，tcp_hashinfo实例最主要的用途就是根据不同条件，快速查找到对应的socket。'>
 <meta name='theme-color' content='#ffcd00'>
 
 <meta property='og:title' content='Linux系统研究 - 操作系统是如何管理tcp连接的 • wangyuntao'>
 <meta property='og:description' content='首先，在linux内核的网络模块里维护着一个全局实例，用来存储所有和tcp相关的socket：
-// net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket类型的不同，划分成四个hashtable：
-// include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是正在建立连接或已经建立连接的socket  // 比如，当内核收到一个tcp消息时，它先从消息头里读出地址和端口等信息  // 然后用该信息到ehash里获取对应的socket  // 最后把剩余的tcp数据添加到该socket的recv buf中供用户程序读取  struct inet_ehash_bucket *ehash; // key是本地端口  // value是使用这个端口的所有socket  // 比如，当我们用socket监听一个端口时，该socket就在bhash里  // 同理，由该监听端口建立的连接对应的那些socket也在这里  // 因为它们也都是使用同样的本地端口  struct inet_bind_hashbucket *bhash; // key是本地地址和端口组成的二元组  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 在系统启动时，这个全局的tcp_hashinfo实例会在下面的方法中被初始化：
-// net/ipv4/tcp.'>
+// net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket用途的不同，划分成四个hashtable：
+// include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是想要进行tcp通信的所有socket  // 比如正在建立连接的socket，正在传输数据的socket，以及正在关闭连接的socket  // 当内核收到一个tcp消息时，会先提取tcp消息头中的远程及本地的地址端口信息  // 然后以该信息作为key，在ehash中找对应的socket，如果该socket存在  // 则根据这个socket的当期状态以及tcp消息的内容，对该socket做后续的逻辑处理  struct inet_ehash_bucket *ehash; // key是本地端口  // value是一个集合对象，里面存放着所有正在使用该端口的socket  // 比如监听着某个端口的服务端socket  // 比如通过某个监听端口建立tcp连接的对应的本地socket（该socket和监听socket使用同样的本地端口）  // 该hashtable的作用是为了查找某个端口是否可以被使用  // 比如在我们执行bind操作时  // 比如在我们调用connect方法，操作系统帮我们挑选本地端口时  struct inet_bind_hashbucket *bhash; // key是由本地地址和本地端口组成的二元组  // value是对应的处于监听状态中的socket  // 该hashtable的作用是，当内核收到建立tcp连接请求时  // 可以从这里快速的查找到对应的服务端监听socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于监听状态中的socket  // 由于该hashtable在tcp的主体逻辑中并不会被大量使用  // 所以下文不会过多介绍  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 由上可见，tcp_hashinfo实例最主要的用途就是根据不同条件，快速查找到对应的socket。'>
 <meta property='og:url' content='https://ytcode.io/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/'>
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Linux'><meta property='article:published_time' content='2019-10-31T14:16:49&#43;08:00'/><meta property='article:modified_time' content='2019-10-31T14:16:49&#43;08:00'/><meta name='twitter:card' content='summary'>
@@ -169,7 +167,7 @@
   <polyline points="12 6 12 12 15 15"/>
   
 </svg>
-2 mins read
+6 mins read
 </span>
 
 
@@ -186,38 +184,47 @@
   <p>首先，在linux内核的网络模块里维护着一个全局实例，用来存储所有和tcp相关的socket：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_ipv4.c
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> inet_hashinfo tcp_hashinfo;</code></pre></div>
-<p>其次，在该实例的内部，又根据socket类型的不同，划分成四个hashtable：</p>
+<p>其次，在该实例的内部，又根据socket用途的不同，划分成四个hashtable：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// include/net/inet_hashtables.h
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> inet_hashinfo {
         <span style="color:#75715e">// key是由本地地址、本地端口、远程地址、远程端口组成的四元组
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是正在建立连接或已经建立连接的socket
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如，当内核收到一个tcp消息时，它先从消息头里读出地址和端口等信息
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 然后用该信息到ehash里获取对应的socket
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 最后把剩余的tcp数据添加到该socket的recv buf中供用户程序读取
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是想要进行tcp通信的所有socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如正在建立连接的socket，正在传输数据的socket，以及正在关闭连接的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 当内核收到一个tcp消息时，会先提取tcp消息头中的远程及本地的地址端口信息
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 然后以该信息作为key，在ehash中找对应的socket，如果该socket存在
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 则根据这个socket的当期状态以及tcp消息的内容，对该socket做后续的逻辑处理
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_ehash_bucket        <span style="color:#f92672">*</span>ehash;
 
         <span style="color:#75715e">// key是本地端口
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是使用这个端口的所有socket
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如，当我们用socket监听一个端口时，该socket就在bhash里
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 同理，由该监听端口建立的连接对应的那些socket也在这里
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 因为它们也都是使用同样的本地端口
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是一个集合对象，里面存放着所有正在使用该端口的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如监听着某个端口的服务端socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如通过某个监听端口建立tcp连接的对应的本地socket（该socket和监听socket使用同样的本地端口）
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 该hashtable的作用是为了查找某个端口是否可以被使用
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如在我们执行bind操作时
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 比如在我们调用connect方法，操作系统帮我们挑选本地端口时
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_bind_hashbucket     <span style="color:#f92672">*</span>bhash;
 
-        <span style="color:#75715e">// key是本地地址和端口组成的二元组
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是对应的处于listen状态的socket
+        <span style="color:#75715e">// key是由本地地址和本地端口组成的二元组
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是对应的处于监听状态中的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 该hashtable的作用是，当内核收到建立tcp连接请求时
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 可以从这里快速的查找到对应的服务端监听socket
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_listen_hashbucket   <span style="color:#f92672">*</span>lhash2;
 
         <span style="color:#75715e">// key是本地端口
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是对应的处于listen状态的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// value是对应的处于监听状态中的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 由于该hashtable在tcp的主体逻辑中并不会被大量使用
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 所以下文不会过多介绍
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_listen_hashbucket   listening_hash[INET_LHTABLE_SIZE];
 };</code></pre></div>
+<p>由上可见，tcp_hashinfo实例最主要的用途就是根据不同条件，快速查找到对应的socket。</p>
+
 <p>在系统启动时，这个全局的tcp_hashinfo实例会在下面的方法中被初始化：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp.c
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> __init <span style="color:#a6e22e">tcp_init</span>(<span style="color:#66d9ef">void</span>)
 {
         <span style="color:#75715e">// 初始化tcp_hashinfo里的四个hashtable等信息
 </span><span style="color:#75715e"></span>}</code></pre></div>
-<p>该tcp_hashinfo实例还会被赋值给下面tcp_prot实例中的对应字段：</p>
+<p>该tcp_hashinfo实例还会被赋值给另外一个全局实例tcp_prot中的h.hashinfo字段：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_ipv4.c
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> proto tcp_prot <span style="color:#f92672">=</span> {
         <span style="color:#75715e">// 在struct sock里会通过sk_prot字段引用该tcp_prot实例
@@ -225,17 +232,31 @@
 </span><span style="color:#75715e"></span>        <span style="color:#75715e">// 就可以通过它的sk_prot字段获取tcp_prot实例
 </span><span style="color:#75715e"></span>        <span style="color:#75715e">// 进而也就可以获取tcp_hashinfo实例
 </span><span style="color:#75715e"></span>        .h.hashinfo             <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>tcp_hashinfo,
-};
-EXPORT_SYMBOL(tcp_prot);</code></pre></div>
-<p>好，以上就是操作系统管理tcp连接用到的全局的数据结构，接下来我们看一些具体操作。</p>
+};</code></pre></div>
+<p>tcp_hashinfo中的各种hashtable用的就是最基本的数组链表结构，当socket要插入到一个hashtable中时，会以一个节点的形式，挂在该hashtable内部数组的某个槽位所指的链表里。</p>
 
-<p>在tcp编程中一般都分为客户端和服务端，我们先来看下服务端对应的操作。</p>
+<p>在把socket添加到链表的过程中，操作系统会根据目标hashtable的不同，使用不同的socket结构体中的字段，为了便于对后文的理解，下面我们对这些字段做一个简单梳理：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// include/net/sock.h
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> sock {                 <span style="color:#75715e">// 在内核中以struct sock结构体表示一个socket
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> sock_common      __sk_common;
+<span style="color:#75715e">#define sk_node                 __sk_common.skc_node         </span><span style="color:#75715e">// 在添加到listening_hash时使用
+</span><span style="color:#75715e"></span><span style="color:#75715e">#define sk_nulls_node           __sk_common.skc_nulls_node   </span><span style="color:#75715e">// 在添加到ehash时使用
+</span><span style="color:#75715e"></span><span style="color:#75715e">#define sk_bind_node            __sk_common.skc_bind_node    </span><span style="color:#75715e">// 在添加到bhash的value的owners时使用
+</span><span style="color:#75715e"></span><span style="color:#75715e">#define sk_hash                 __sk_common.skc_hash         </span><span style="color:#75715e">// 该sock在添加到ehash时的hash值，由本地及远程的地址端口信息计算得来
+</span><span style="color:#75715e"></span>}
 
-<p>首先，一个socket想要监听一个端口，必须要先bind一个地址，然后再执行listen操作。</p>
+<span style="color:#75715e">// include/net/inet_connection_sock.h
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> inet_connection_sock { <span style="color:#75715e">// 该结构体是struct sock的子类
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_bind_bucket   <span style="color:#f92672">*</span>icsk_bind_hash;           <span style="color:#75715e">// 指向该sock所属的bhash中的value（该sock会被放入该value的owners字段里）
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> hlist_node         icsk_listen_portaddr_node; <span style="color:#75715e">// 在添加到lhash2时使用    
+</span><span style="color:#75715e"></span>}</code></pre></div>
+<p>好，以上就是操作系统在管理tcp连接时，用到的所有的数据结构及相关字段。下面我们就以这些内容作为切入点，看下操作系统内的tcp机制是如何实现的。</p>
 
-<p>其中bind操作就用到了上面的tcp_hashinfo实例里的bhash这个字段，用来判断该端口是否被占用。</p>
+<p>在tcp编程中，一般都分为客户端和服务端，我们先来看下服务端的相关操作。</p>
 
-<p>来看下代码：</p>
+<p>首先，要开启一个服务端，必须要经过两步，第一步是bind操作，用来指定我们要监听的端口，第二步是listen操作，用来告诉操作系统可以开始监听该端口进来的tcp连接了。</p>
+
+<p>我们先来看下bind操作是如何与tcp_hashinfo打交道的：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/inet_connection_sock.c
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">inet_csk_get_port</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">short</span> snum)
 {
@@ -252,21 +273,23 @@ EXPORT_SYMBOL(tcp_prot);</code></pre></div>
 </span><span style="color:#75715e"></span>        head <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>hinfo<span style="color:#f92672">-&gt;</span>bhash[inet_bhashfn(net, port,
                                           hinfo<span style="color:#f92672">-&gt;</span>bhash_size)];
 
-        <span style="color:#75715e">// 遍历slot指向的链表，找到port对应的值
+        <span style="color:#75715e">// 遍历slot指向的链表，找到该port对应的值
 </span><span style="color:#75715e"></span>        inet_bind_bucket_for_each(tb, <span style="color:#f92672">&amp;</span>head<span style="color:#f92672">-&gt;</span>chain)
                 <span style="color:#66d9ef">if</span> (net_eq(ib_net(tb), net) <span style="color:#f92672">&amp;&amp;</span> tb<span style="color:#f92672">-&gt;</span>l3mdev <span style="color:#f92672">==</span> l3mdev <span style="color:#f92672">&amp;&amp;</span>
                     tb<span style="color:#f92672">-&gt;</span>port <span style="color:#f92672">==</span> port)
                         <span style="color:#66d9ef">goto</span> tb_found;
 
-        <span style="color:#75715e">// 如果没找到，说明现在还没有人使用这个端口，就新创建一个
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 新创建的实例就会放到bhash中，表明这个端口我在使用了
+        <span style="color:#75715e">// 如果没有找到，说明现在还没有socket使用这个端口
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 创建一个新的value实例并放入到bhash中
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 用来表明这个端口现在有socket在用了
 </span><span style="color:#75715e"></span>        tb <span style="color:#f92672">=</span> inet_bind_bucket_create(hinfo<span style="color:#f92672">-&gt;</span>bind_bucket_cachep,
                                      net, head, port, l3mdev);
 
 tb_found:
-        <span style="color:#75715e">// 如果tb的owners字段不为空，则说明有人在使用这个端口
+        <span style="color:#75715e">// 如果tb里的owners字段不为空，说明当前有socket在使用这个端口
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>hlist_empty(<span style="color:#f92672">&amp;</span>tb<span style="color:#f92672">-&gt;</span>owners)) {
-                <span style="color:#75715e">// 如果该端口被别人占用了，且不能共享使用，就返回错误给用户
+                <span style="color:#75715e">// 判断我们的socket和owners里的socket是否可以共享使用这个端口
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// 如果不可以，则返回错误给用户
 </span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> (inet_csk_bind_conflict(sk, tb, true, true))
                         <span style="color:#66d9ef">goto</span> fail_unlock;
         }
@@ -277,28 +300,26 @@ tb_found:
 </span><span style="color:#75715e"></span>        <span style="color:#75715e">// 方法内容会在下面描述
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>inet_csk(sk)<span style="color:#f92672">-&gt;</span>icsk_bind_hash)
                 inet_bind_hash(sk, tb, port);
-}
-EXPORT_SYMBOL_GPL(inet_csk_get_port);                                </code></pre></div>
-<p>再来看下inet_bind_hash方法：</p>
+}</code></pre></div>
+<p>再来看下上面提到的inet_bind_hash方法：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/inet_hashtables.c
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">inet_bind_hash</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> inet_bind_bucket <span style="color:#f92672">*</span>tb,
                     <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">short</span> snum)
 {
-         <span style="color:#75715e">// 保存绑定端口
-</span><span style="color:#75715e"></span>        inet_sk(sk)<span style="color:#f92672">-&gt;</span>inet_num <span style="color:#f92672">=</span> snum;
-        
-        <span style="color:#75715e">// tb是上面方法中获取的或创建的bhash中的一个值
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 它的owners字段存放的是所有使用该端口的sock
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 下面语句的意思是，把这个sock也加入到owner里
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 这样在其他人拿到tb时，就能知道哪些sock在使用这个tb对应的端口了
+        <span style="color:#75715e">// tb是上面方法中在bhash里获取的或新创建的一个value实例
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 它的owners字段存放的是所有正在使用该端口的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 下面语句的意思是，把这个socket也加入到owners里
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 表明这个socket也在使用该端口
 </span><span style="color:#75715e"></span>        sk_add_bind_node(sk, <span style="color:#f92672">&amp;</span>tb<span style="color:#f92672">-&gt;</span>owners);
 
-        <span style="color:#75715e">// 将tb地址存放到sock的icsk_bind_hash字段里
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 这样以后想知道该sock对应的bhash里的值时（比如在移除owners时）
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 就可以通过下面的字段获取了
+        <span style="color:#75715e">// 将tb存放到该socket的icsk_bind_hash字段里
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 这样以后如果我们想要将该socket从bhash中移除时
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 就可以通过这个字段快速定位到该socket所属的bhash中value了
 </span><span style="color:#75715e"></span>        inet_csk(sk)<span style="color:#f92672">-&gt;</span>icsk_bind_hash <span style="color:#f92672">=</span> tb;
 }</code></pre></div>
-<p>好，bind方法涉及到tcp_hashinfo的地方，到这里就都已经讲完了，我们再看下listen方法：</p>
+<p>由上可见，tcp_hashinfo在bind操作中的作用就是用于检查指定端口是否可使用。</p>
+
+<p>下面我们再来看下listen操作：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/inet_hashtables.c
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">__inet_hash</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>osk)
 {
@@ -313,25 +334,456 @@ EXPORT_SYMBOL_GPL(inet_csk_get_port);                                </code></pr
         <span style="color:#75715e">// hashinfo就是全局实例tcp_hashinfo
 </span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_hashinfo <span style="color:#f92672">*</span>hashinfo <span style="color:#f92672">=</span> sk<span style="color:#f92672">-&gt;</span>sk_prot<span style="color:#f92672">-&gt;</span>h.hashinfo;
 
-        <span style="color:#75715e">// 根据本地端口，找到该sock在listening_hash中的slot
+        <span style="color:#75715e">// 根据本地端口，找到该socket在listening_hash中的slot
 </span><span style="color:#75715e"></span>        ilb <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>hashinfo<span style="color:#f92672">-&gt;</span>listening_hash[inet_sk_listen_hashfn(sk)];
 
-        <span style="color:#75715e">// 将该sock添加到slot对应的链表中
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (IS_ENABLED(CONFIG_IPV6) <span style="color:#f92672">&amp;&amp;</span> sk<span style="color:#f92672">-&gt;</span>sk_reuseport <span style="color:#f92672">&amp;&amp;</span>
-                sk<span style="color:#f92672">-&gt;</span>sk_family <span style="color:#f92672">==</span> AF_INET6)
-                hlist_add_tail_rcu(<span style="color:#f92672">&amp;</span>sk<span style="color:#f92672">-&gt;</span>sk_node, <span style="color:#f92672">&amp;</span>ilb<span style="color:#f92672">-&gt;</span>head);
-        <span style="color:#66d9ef">else</span>
+        <span style="color:#75715e">// 将该socket添加到这个slot对应的链表中
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">else</span>
                 hlist_add_head_rcu(<span style="color:#f92672">&amp;</span>sk<span style="color:#f92672">-&gt;</span>sk_node, <span style="color:#f92672">&amp;</span>ilb<span style="color:#f92672">-&gt;</span>head);
 
-        <span style="color:#75715e">// 以本地端口和地址作为key，将该sock加入到tcp_hashinfo里的lhash2里
+        <span style="color:#75715e">// 下面的方法后面另讲
 </span><span style="color:#75715e"></span>        inet_hash2(hashinfo, sk);
-}
-EXPORT_SYMBOL(__inet_hash);</code></pre></div>
-<p>listen方法涉及到tcp_hashinfo的地方就是这一点点。</p>
+}</code></pre></div>
+<p>再看下上面提到的inet_hash2方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/inet_hashtables.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">inet_hash2</span>(<span style="color:#66d9ef">struct</span> inet_hashinfo <span style="color:#f92672">*</span>h, <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk)
+{
+        <span style="color:#75715e">// 根据该socket的本地地址和本地端口
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 找到其在lhash2中所属的slot
+</span><span style="color:#75715e"></span>        ilb2 <span style="color:#f92672">=</span> inet_lhash2_bucket_sk(h, sk);
+
+        <span style="color:#75715e">// 将该socket加入到这个slot对应的链表中
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">else</span>
+                hlist_add_head_rcu(<span style="color:#f92672">&amp;</span>inet_csk(sk)<span style="color:#f92672">-&gt;</span>icsk_listen_portaddr_node,
+                                   <span style="color:#f92672">&amp;</span>ilb2<span style="color:#f92672">-&gt;</span>head);
+}</code></pre></div>
+<p>由上可见，listen操作只是把对应的socket加入到tcp_hashinfo的listening_hash和lhash2中，供后面tcp连接时查询用。</p>
 
 <p>服务端的相关操作就是这些，我们再来看下客户端。</p>
 
-<p>未完待续&hellip;</p>
+<p>客户端第一步要做的事就是连接服务器，所以我们看下对应的connect方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/inet_hashtables.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">__inet_hash_connect</span>(<span style="color:#66d9ef">struct</span> inet_timewait_death_row <span style="color:#f92672">*</span>death_row,
+                <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, u32 port_offset,
+                <span style="color:#66d9ef">int</span> (<span style="color:#f92672">*</span>check_established)(<span style="color:#66d9ef">struct</span> inet_timewait_death_row <span style="color:#f92672">*</span>,
+                        <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>, __u16, <span style="color:#66d9ef">struct</span> inet_timewait_sock <span style="color:#f92672">**</span>))
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// SYSCALL_DEFINE3(connect)
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __sys_connect
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// inet_stream_connect
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __inet_stream_connect
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_connect
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// inet_hash_connect
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __inet_hash_connect
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// hinfo是全局的tcp_hashinfo实例
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_hashinfo <span style="color:#f92672">*</span>hinfo <span style="color:#f92672">=</span> death_row<span style="color:#f92672">-&gt;</span>hashinfo;
+
+        <span style="color:#75715e">// 一般来说，connect操作我们都不会主动指定本地端口
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 而是让操作系统帮我们自由挑选
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 下面的方法就是用于获取操作系统自由挑选的本地端口的范围
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 该范围默认是 [32768-60999]
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 当前范围可由以下命令查看：
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// $ cat /proc/sys/net/ipv4/ip_local_port_range
+</span><span style="color:#75715e"></span>        inet_get_local_port_range(net, <span style="color:#f92672">&amp;</span>low, <span style="color:#f92672">&amp;</span>high);
+
+        <span style="color:#75715e">// 依次检测范围内的端口，找到第一个可以使用的
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 第一个要检测的端口
+</span><span style="color:#75715e"></span>        port <span style="color:#f92672">=</span> low <span style="color:#f92672">+</span> offset;
+        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> remaining; i <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>, port <span style="color:#f92672">+=</span> <span style="color:#ae81ff">2</span>) {
+                <span style="color:#75715e">// 找到该端口对应的bhash中的slot
+</span><span style="color:#75715e"></span>                head <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>hinfo<span style="color:#f92672">-&gt;</span>bhash[inet_bhashfn(net, port, hinfo<span style="color:#f92672">-&gt;</span>bhash_size)];
+
+                <span style="color:#75715e">// 遍历该slot指向的链表，查看是否有人已经在使用该端口
+</span><span style="color:#75715e"></span>                inet_bind_bucket_for_each(tb, <span style="color:#f92672">&amp;</span>head<span style="color:#f92672">-&gt;</span>chain) {
+                        <span style="color:#66d9ef">if</span> (net_eq(ib_net(tb), net) <span style="color:#f92672">&amp;&amp;</span> tb<span style="color:#f92672">-&gt;</span>l3mdev <span style="color:#f92672">==</span> l3mdev <span style="color:#f92672">&amp;&amp;</span> tb<span style="color:#f92672">-&gt;</span>port <span style="color:#f92672">==</span> port) {
+                                <span style="color:#75715e">// 如果该端口已经被人使用
+</span><span style="color:#75715e"></span>                                <span style="color:#75715e">// 那就检查一下使用者中是否有处于连接状态的socket
+</span><span style="color:#75715e"></span>                                <span style="color:#75715e">// 且该socket的tcp四元组和我们的socket的tcp四元组完全一致（tcp四元组唯一确定一个tcp连接）
+</span><span style="color:#75715e"></span>                                <span style="color:#75715e">// 如果有，则该端口不可用
+</span><span style="color:#75715e"></span>                                <span style="color:#75715e">// 如果没有，则可用
+</span><span style="color:#75715e"></span>                                <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>check_established(death_row, sk,
+                                                       port, <span style="color:#f92672">&amp;</span>tw))
+                                        <span style="color:#66d9ef">goto</span> ok;
+                                <span style="color:#66d9ef">goto</span> next_port;
+                        }
+                }
+
+                <span style="color:#75715e">// 如果该端口没人用，我们就在bhash中新创建一个对象，表示我们要用
+</span><span style="color:#75715e"></span>                tb <span style="color:#f92672">=</span> inet_bind_bucket_create(hinfo<span style="color:#f92672">-&gt;</span>bind_bucket_cachep,
+                                             net, head, port, l3mdev);
+                <span style="color:#66d9ef">goto</span> ok;
+next_port:
+        }
+ok:
+        <span style="color:#75715e">// 该方法上面有讲过，主要就是将该socket与tb实例联系起来
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 详情可参考上面
+</span><span style="color:#75715e"></span>        inet_bind_hash(sk, tb, port);
+        <span style="color:#66d9ef">if</span> (sk_unhashed(sk)) {
+                <span style="color:#75715e">// 该方法下面会详细看
+</span><span style="color:#75715e"></span>                inet_ehash_nolisten(sk, (<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>)tw);
+        }
+}                          </code></pre></div>
+<p>再来看下上面提到的inet_ehash_nolisten方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/inet_hashtables.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">inet_ehash_insert</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>osk)
+{
+        <span style="color:#75715e">// hashinfo就是全局的tcp_hashinfo实例
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_hashinfo <span style="color:#f92672">*</span>hashinfo <span style="color:#f92672">=</span> sk<span style="color:#f92672">-&gt;</span>sk_prot<span style="color:#f92672">-&gt;</span>h.hashinfo;
+
+        <span style="color:#75715e">// 根据本地和远程的地址端口信息算出该socket的hash值
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 并保存到sk的sk_hash字段里，供后续使用
+</span><span style="color:#75715e"></span>        sk<span style="color:#f92672">-&gt;</span>sk_hash <span style="color:#f92672">=</span> sk_ehashfn(sk);
+
+        <span style="color:#75715e">// 根据该hash值找到ehash中对应的slot
+</span><span style="color:#75715e"></span>        head <span style="color:#f92672">=</span> inet_ehash_bucket(hashinfo, sk<span style="color:#f92672">-&gt;</span>sk_hash);
+
+        <span style="color:#75715e">// 把该socket加入到该slot指向的链表中
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (ret)
+                __sk_nulls_add_node_rcu(sk, list);
+}
+
+<span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">inet_ehash_nolisten</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>osk)
+{
+        <span style="color:#66d9ef">bool</span> ok <span style="color:#f92672">=</span> inet_ehash_insert(sk, osk);
+}</code></pre></div>
+<p>由上可见，tcp_hashinfo在connect操作里的作用是，先根据bhash和ehash里的信息，为该次connect操作挑选出一个合适的本地端口（该端口的使用也会被记录在bhash里），然后在syn消息发送给服务器之前，将该socket放入到ehash中，这样当内核收到服务器的应答消息时，就可以找到对应的socket了。</p>
+
+<p>connect操作最终会发syn消息给服务器，所以下面我们就来看下服务器在收到这个syn消息时是如何处理的。</p>
+
+<p>在此之前，我们先讲一些铺垫性的内容。</p>
+
+<p>当操作系统收到任意tcp的消息时，都会调用下面的方法，找到该tcp消息所属的socket，然后再根据该socket的当前状态和tcp消息的内容做后续处理：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_ipv4.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tcp_v4_rcv</span>(<span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb)
+{
+        <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk;
+
+        <span style="color:#75715e">// 该方法会从tcp_hashinfo中的各种hashtable中尝试找到对应的socket
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// th-&gt;source是发送方的本地端口
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// th-&gt;dest是接收方的本地端口
+</span><span style="color:#75715e"></span>        sk <span style="color:#f92672">=</span> __inet_lookup_skb(<span style="color:#f92672">&amp;</span>tcp_hashinfo, skb, __tcp_hdrlen(th), th<span style="color:#f92672">-&gt;</span>source,
+                               th<span style="color:#f92672">-&gt;</span>dest, sdif, <span style="color:#f92672">&amp;</span>refcounted);
+}                              </code></pre></div>
+<p>再看下__inet_lookup_skb方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// include/net/inet_hashtables.h
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">inline</span> <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span><span style="color:#a6e22e">__inet_lookup_skb</span>(<span style="color:#66d9ef">struct</span> inet_hashinfo <span style="color:#f92672">*</span>hashinfo,
+                                             <span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb,
+                                             <span style="color:#66d9ef">int</span> doff,
+                                             <span style="color:#66d9ef">const</span> __be16 sport,
+                                             <span style="color:#66d9ef">const</span> __be16 dport,
+                                             <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> sdif,
+                                             <span style="color:#66d9ef">bool</span> <span style="color:#f92672">*</span>refcounted)
+{
+        <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> iphdr <span style="color:#f92672">*</span>iph <span style="color:#f92672">=</span> ip_hdr(skb);
+        <span style="color:#66d9ef">return</span> __inet_lookup(dev_net(skb_dst(skb)<span style="color:#f92672">-&gt;</span>dev), hashinfo, skb,
+                             doff, iph<span style="color:#f92672">-&gt;</span>saddr, sport,
+                             iph<span style="color:#f92672">-&gt;</span>daddr, dport, inet_iif(skb), sdif,
+                             refcounted);
+}</code></pre></div>
+<p>该方法又调用了__inet_lookup方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">inline</span> <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span><span style="color:#a6e22e">__inet_lookup</span>(<span style="color:#66d9ef">struct</span> net <span style="color:#f92672">*</span>net,
+                                         <span style="color:#66d9ef">struct</span> inet_hashinfo <span style="color:#f92672">*</span>hashinfo,
+                                         <span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb, <span style="color:#66d9ef">int</span> doff,
+                                         <span style="color:#66d9ef">const</span> __be32 saddr, <span style="color:#66d9ef">const</span> __be16 sport,
+                                         <span style="color:#66d9ef">const</span> __be32 daddr, <span style="color:#66d9ef">const</span> __be16 dport,
+                                         <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> dif, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">int</span> sdif,
+                                         <span style="color:#66d9ef">bool</span> <span style="color:#f92672">*</span>refcounted)
+{
+        u16 hnum <span style="color:#f92672">=</span> ntohs(dport);
+        <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk;
+
+        <span style="color:#75715e">// 该方法会根据本地和远程的地址端口信息
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 从tcp_hashinfo的ehash中找对应的socket
+</span><span style="color:#75715e"></span>        sk <span style="color:#f92672">=</span> __inet_lookup_established(net, hashinfo, saddr, sport,
+                                       daddr, hnum, dif, sdif);
+
+       <span style="color:#75715e">// 如果在ehash中没有找到对应的socket，则调用下面的方法
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">// 从tcp_hashinfo的lhash2中找对应的处于listen状态的socket
+</span><span style="color:#75715e"></span>       <span style="color:#66d9ef">return</span> __inet_lookup_listener(net, hashinfo, skb, doff, saddr,
+                                      sport, daddr, hnum, dif, sdif);
+}</code></pre></div>
+<p>好，铺垫性内容结束。</p>
+
+<p>当服务端收到客户端发来的syn包后，会先通过上述方法，在lhash2中找到对应的listen状态的socket（listen方法把这个socket放入到lhash2中的），然后执行下面的逻辑：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_input.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tcp_conn_request</span>(<span style="color:#66d9ef">struct</span> request_sock_ops <span style="color:#f92672">*</span>rsk_ops,
+                     <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> tcp_request_sock_ops <span style="color:#f92672">*</span>af_ops,
+                     <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_do_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_rcv_state_process
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_conn_request
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 该方法的参数sk就是上面找到的处于listen状态的socket
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 服务端在收到syn消息后，并不是直接创建一个struct sock
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 而是创建一个struct request_sock，表示该socket还处于tcp三次握手过程中
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> request_sock <span style="color:#f92672">*</span>req;
+        req <span style="color:#f92672">=</span> inet_reqsk_alloc(rsk_ops, sk, <span style="color:#f92672">!</span>want_cookie);
+
+        <span style="color:#66d9ef">if</span> (fastopen_sk) {
+        } <span style="color:#66d9ef">else</span> {
+                <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>want_cookie)
+                        <span style="color:#75715e">// 该方法会根据本地和远程的地址端口信息
+</span><span style="color:#75715e"></span>                        <span style="color:#75715e">// 将request_sock放到tcp_hashinfo里的ehash里
+</span><span style="color:#75715e"></span>                        <span style="color:#75715e">// 这样后续的消息就可以找到这个request_sock了
+</span><span style="color:#75715e"></span>                        inet_csk_reqsk_queue_hash_add(sk, req,
+                                tcp_timeout_init((<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>)req));
+        }
+}</code></pre></div>
+<p>服务端在处理完syn消息后，会发synack给客户端，客户端收到synack消息后，会再次发ack给服务端，同时将客户端的socket状态设置为TCP_ESTABLISHED。</p>
+
+<p>由于客户端处理synack消息的逻辑不涉及到tcp_hashinfo里的内容，所以这里就不详细说了。</p>
+
+<p>再看下服务端在收到ack消息之后的逻辑。</p>
+
+<p>服务端在收到ack消息后，会先通过上面介绍过的__inet_lookup_skb方法，找到刚刚创建的request_sock，然后执行如下逻辑：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_ipv4.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span><span style="color:#a6e22e">tcp_v4_syn_recv_sock</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb,
+                                  <span style="color:#66d9ef">struct</span> request_sock <span style="color:#f92672">*</span>req,
+                                  <span style="color:#66d9ef">struct</span> dst_entry <span style="color:#f92672">*</span>dst,
+                                  <span style="color:#66d9ef">struct</span> request_sock <span style="color:#f92672">*</span>req_unhash,
+                                  <span style="color:#66d9ef">bool</span> <span style="color:#f92672">*</span>own_req)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_check_req
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_syn_recv_sock
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 收到客户端的ack消息表示该tcp连接建立成功
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 下面的方法会根据request_sock创建一个真正的struct sock
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>newsk;
+        newsk <span style="color:#f92672">=</span> tcp_create_openreq_child(sk, req, skb);
+
+        <span style="color:#75715e">// 该方法会把新创建的socket放到tcp_hashinfo的bhash中
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 对应的端口就是监听socket所使用的端口
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 此时该端口对应的bhash中的value中的owners字段里包含监听socket和这个新创建的socket
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (__inet_inherit_port(sk, newsk) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+                <span style="color:#66d9ef">goto</span> put_and_exit;
+
+        <span style="color:#75715e">// 在上面创建request_sock时，把它放到tcp_hashinfo的ehash里
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 到这里request_sock的任务已经完成
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 所以下面的方法会把request_sock从ehash中移除
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 而把新创建的socket放到ehash里
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">*</span>own_req <span style="color:#f92672">=</span> inet_ehash_nolisten(newsk, req_to_sk(req_unhash));
+}</code></pre></div>
+<p>到现在一个完整的tcp连接已经建立好了，我们再重新梳理下整个思路。</p>
+
+<p>首先，服务端的socket先执行了bind操作，把它自己放到了tcp_hashinfo的bhash中，然后执行了listen操作，把它自己放到了tcp_hashinfo的lhash2中。</p>
+
+<p>然后，客户端执行connect方法，把对应的socket放到了bhash和ehash中，然后发了syn消息给服务端。</p>
+
+<p>服务端收到syn后，先从lhash2中找到对应的listen状态的socket，然后又根据该socket和syn消息创建了request_sock，并放入ehash中，最后发synack给客户端。</p>
+
+<p>客户端收到synack后，先从ehash中找到对应的socket，然后把其状态设置为TCP_ESTABLISHED，最后又返回ack给服务端。</p>
+
+<p>服务端收到ack后，会先从ehash中找到之前创建的request_sock，然后根据该request_sock，创建真正的sock，最后将request_sock从ehash中移除，将新创建的sock放到bhash和ehash中。</p>
+
+<p>至此，一个tcp连接就建立成功。</p>
+
+<p>再之后，就是tcp连接的数据传输过程了，当操作系统收到对方发来的数据时，先根据tcp消息头里的地址端口等信息，从ehash中找到对应的socket，然后将该数据添加到这个socket的接受缓冲区里，这样用户就可以通过read等方法获取这些数据了。</p>
+
+<p>这就是在tcp连接建立成功之后，tcp内的逻辑对tcp_hashinfo的使用。</p>
+
+<p>下面我们再来看下在tcp的关闭流程中，tcp_hashinfo是如何被使用的。</p>
+
+<p>假设客户端先调用了close方法，主动关闭了连接，看下对应代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tcp_close</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">long</span> timeout)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// SYSCALL_DEFINE1(close)
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __close_fd
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// filp_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fput_many
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ____fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// sock_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __sock_release
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// inet_release
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_close
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 下面的方法会将socket状态设置为TCP_FIN_WAIT1
+</span><span style="color:#75715e"></span>        } <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (tcp_close_state(sk)) {
+                <span style="color:#75715e">// 发fin消息给对方
+</span><span style="color:#75715e"></span>                tcp_send_fin(sk);
+        }
+}</code></pre></div>
+<p>服务端在收到fin包的处理逻辑为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_input.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tcp_fin</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_do_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_rcv_established
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_data_queue
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_fin
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">switch</span> (sk<span style="color:#f92672">-&gt;</span>sk_state) {
+        <span style="color:#66d9ef">case</span> TCP_ESTABLISHED:
+                tcp_set_state(sk, TCP_CLOSE_WAIT);
+}               </code></pre></div>
+<p>该方法将服务端socket的状态设置为TCP_CLOSE_WAIT，然后返回ack给客户端。</p>
+
+<p>客户端收到ack后的处理逻辑：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_input.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tcp_rcv_state_process</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_do_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_rcv_state_process
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">switch</span> (sk<span style="color:#f92672">-&gt;</span>sk_state) {
+        <span style="color:#66d9ef">case</span> TCP_FIN_WAIT1: {
+                tcp_set_state(sk, TCP_FIN_WAIT2);
+                <span style="color:#66d9ef">break</span>;
+        }       
+}</code></pre></div>
+<p>该方法收到ack后，将客户端对应的socket的状态设置为TCP_FIN_WAIT2。</p>
+
+<p>此时，假设服务器的应用层也调用了socket的close方法，该方法会执行以下逻辑：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tcp_close</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">long</span> timeout)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// SYSCALL_DEFINE1(close)
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __close_fd
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// filp_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fput_many
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ____fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// sock_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __sock_release
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// inet_release
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_close
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// 下面的方法会将socket状态设置为TCP_LAST_ACK
+</span><span style="color:#75715e"></span>        } <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (tcp_close_state(sk)) {
+                <span style="color:#75715e">// 发fin消息给对方
+</span><span style="color:#75715e"></span>                tcp_send_fin(sk);
+        }
+}</code></pre></div>
+<p>客户端收到fin消息的处理逻辑：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_input.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tcp_fin</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk)
+{
+        <span style="color:#75715e">// 该方法调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_do_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_rcv_state_process
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_data_queue
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_fin
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">switch</span> (sk<span style="color:#f92672">-&gt;</span>sk_state) {
+        <span style="color:#66d9ef">case</span> TCP_FIN_WAIT2:
+                <span style="color:#75715e">// 发送ack给对方
+</span><span style="color:#75715e"></span>                tcp_send_ack(sk);
+                <span style="color:#75715e">// 进入time wait逻辑处理
+</span><span style="color:#75715e"></span>                tcp_time_wait(sk, TCP_TIME_WAIT, <span style="color:#ae81ff">0</span>);
+        }
+}</code></pre></div>
+<p>继续看下tcp_time_wait方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_minisocks.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tcp_time_wait</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">int</span> state, <span style="color:#66d9ef">int</span> timeo)
+{
+        <span style="color:#75715e">// 类似于三次握手时服务端创建了request_sock
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 这里也根据当前sock创建了一个inet_timewait_sock
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 对应于处于time wait状态时的socket
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">struct</span> inet_timewait_sock <span style="color:#f92672">*</span>tw;
+        tw <span style="color:#f92672">=</span> inet_twsk_alloc(sk, tcp_death_row, state);
+        
+        <span style="color:#66d9ef">if</span> (tw) {
+                <span style="color:#75715e">// 从sock拷贝各种必要数据到inet_timewait_sock
+</span><span style="color:#75715e"></span>
+                <span style="color:#75715e">// 进行time wait定时，超时后会调用inet_twsk_kill方法
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// 将inet_timewait_sock从ehash和bhash中移除
+</span><span style="color:#75715e"></span>                inet_twsk_schedule(tw, timeo);
+
+                <span style="color:#75715e">// 该方法会将sock从ehash中移除
+</span><span style="color:#75715e"></span>                <span style="color:#75715e">// 将inet_timewait_sock加入到ehash和bhash中
+</span><span style="color:#75715e"></span>                inet_twsk_hashdance(tw, sk, <span style="color:#f92672">&amp;</span>tcp_hashinfo);     
+        }
+
+        <span style="color:#75715e">// 该方法会将sock从bhash中移除，并将其销毁
+</span><span style="color:#75715e"></span>        tcp_done(sk);
+}</code></pre></div>
+<p>好，客户端的逻辑就全部完成了，我们再看下服务端逻辑。</p>
+
+<p>当服务器处于TCP_LAST_ACK状态时，收到客户端的ack消息，进行下面的处理：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp_input.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">tcp_rcv_state_process</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">struct</span> sk_buff <span style="color:#f92672">*</span>skb)
+{
+        <span style="color:#75715e">// 该方法调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_v4_do_rcv
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_rcv_state_process
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">switch</span> (sk<span style="color:#f92672">-&gt;</span>sk_state) {
+        <span style="color:#66d9ef">case</span> TCP_LAST_ACK:
+                <span style="color:#66d9ef">if</span> (tp<span style="color:#f92672">-&gt;</span>snd_una <span style="color:#f92672">==</span> tp<span style="color:#f92672">-&gt;</span>write_seq) {
+                        <span style="color:#75715e">// 该方法及其底层方法会将该sock从ebash和bhash中移除
+</span><span style="color:#75715e"></span>                        tcp_done(sk);
+                }       
+        }
+}</code></pre></div>
+<p>到这里，一个tcp连接就完全关闭了，并且前后端的socket都已经从tcp_hashinfo的ehash和bhash中移除。</p>
+
+<p>现在系统又回到tcp连接之前的状态，即只有一个服务端的socket处于listen状态，该socket同时被存放于tcp_hashinfo的bhash、lhash2及listening_hash里。</p>
+
+<p>我们看下当该listen状态的socket关闭的时候，对应的有关tcp_hashinfo的处理：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#75715e">// net/ipv4/tcp.c
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tcp_set_state</span>(<span style="color:#66d9ef">struct</span> sock <span style="color:#f92672">*</span>sk, <span style="color:#66d9ef">int</span> state)
+{
+        <span style="color:#75715e">// 该方法的调用栈
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// SYSCALL_DEFINE1(close)
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __close_fd
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// filp_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// fput_many
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ____fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __fput
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// sock_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// __sock_release
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// inet_release
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_close
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// tcp_set_state
+</span><span style="color:#75715e"></span>
+        <span style="color:#66d9ef">switch</span> (state) {
+        <span style="color:#66d9ef">case</span> TCP_CLOSE:
+                <span style="color:#75715e">// 下面的方法会将socket从lhash2及listening_hash里移除
+</span><span style="color:#75715e"></span>                sk<span style="color:#f92672">-&gt;</span>sk_prot<span style="color:#f92672">-&gt;</span>unhash(sk);
+
+                <span style="color:#75715e">// 下面方法会将socket从bhash中移除
+</span><span style="color:#75715e"></span>                <span style="color:#66d9ef">if</span> (inet_csk(sk)<span style="color:#f92672">-&gt;</span>icsk_bind_hash <span style="color:#f92672">&amp;&amp;</span>
+                    <span style="color:#f92672">!</span>(sk<span style="color:#f92672">-&gt;</span>sk_userlocks <span style="color:#f92672">&amp;</span> SOCK_BINDPORT_LOCK))
+                        inet_put_port(sk);
+        }
+}</code></pre></div>
+<p>至此，所有socket都已关闭，且tcp_hashinfo又回到了最原始的空状态。</p>
+
+<p>上文用了大量的篇幅讲述在tcp的各种操作中，tcp_hashinfo是如何被使用的。其实回过头来看一下，tcp_hashinfo在这其中的作用还是非常简单的，其主要目的就是辅助操作系统在各种情况下找到对应的socket。</p>
+
+<p>比如，在syn消息来时，要找到对应的listen状态的socket，用了tcp_hashinfo中的lhash2。</p>
+
+<p>比如，在syn消息之后的所有后续消息来时，要找到其对应的消息处理socket，用了tcp_hashinfo中的ehash。</p>
+
+<p>比如，在绑定端口或挑选端口时，要用到bhash来查询端口是否被占用。</p>
+
+<p>好，就这么多吧，文章到此就结束了。</p>
+
+<p>总体来说该篇文章是以tcp_hashinfo这个全局实例为中心，看了一下操作系统是如何管理tcp连接的。</p>
+
+<p>希望此文章能给同样处于内核研究的同学一些帮助。</p>
+
+<p>完。</p>
 
 </div>
 

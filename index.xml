@@ -26,9 +26,8 @@
       
       <guid>https://ytcode.io/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/</guid>
       <description>首先，在linux内核的网络模块里维护着一个全局实例，用来存储所有和tcp相关的socket：
-// net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket类型的不同，划分成四个hashtable：
-// include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是正在建立连接或已经建立连接的socket  // 比如，当内核收到一个tcp消息时，它先从消息头里读出地址和端口等信息  // 然后用该信息到ehash里获取对应的socket  // 最后把剩余的tcp数据添加到该socket的recv buf中供用户程序读取  struct inet_ehash_bucket *ehash; // key是本地端口  // value是使用这个端口的所有socket  // 比如，当我们用socket监听一个端口时，该socket就在bhash里  // 同理，由该监听端口建立的连接对应的那些socket也在这里  // 因为它们也都是使用同样的本地端口  struct inet_bind_hashbucket *bhash; // key是本地地址和端口组成的二元组  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于listen状态的socket  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 在系统启动时，这个全局的tcp_hashinfo实例会在下面的方法中被初始化：
-// net/ipv4/tcp.</description>
+// net/ipv4/tcp_ipv4.c struct inet_hashinfo tcp_hashinfo; 其次，在该实例的内部，又根据socket用途的不同，划分成四个hashtable：
+// include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是想要进行tcp通信的所有socket  // 比如正在建立连接的socket，正在传输数据的socket，以及正在关闭连接的socket  // 当内核收到一个tcp消息时，会先提取tcp消息头中的远程及本地的地址端口信息  // 然后以该信息作为key，在ehash中找对应的socket，如果该socket存在  // 则根据这个socket的当期状态以及tcp消息的内容，对该socket做后续的逻辑处理  struct inet_ehash_bucket *ehash; // key是本地端口  // value是一个集合对象，里面存放着所有正在使用该端口的socket  // 比如监听着某个端口的服务端socket  // 比如通过某个监听端口建立tcp连接的对应的本地socket（该socket和监听socket使用同样的本地端口）  // 该hashtable的作用是为了查找某个端口是否可以被使用  // 比如在我们执行bind操作时  // 比如在我们调用connect方法，操作系统帮我们挑选本地端口时  struct inet_bind_hashbucket *bhash; // key是由本地地址和本地端口组成的二元组  // value是对应的处于监听状态中的socket  // 该hashtable的作用是，当内核收到建立tcp连接请求时  // 可以从这里快速的查找到对应的服务端监听socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于监听状态中的socket  // 由于该hashtable在tcp的主体逻辑中并不会被大量使用  // 所以下文不会过多介绍  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 由上可见，tcp_hashinfo实例最主要的用途就是根据不同条件，快速查找到对应的socket。</description>
     </item>
     
     <item>
