@@ -13,7 +13,7 @@
 // include/net/inet_hashtables.h struct inet_hashinfo { // key是由本地地址、本地端口、远程地址、远程端口组成的四元组  // value是想要进行tcp通信的所有socket  // 比如正在建立连接的socket，正在传输数据的socket，以及正在关闭连接的socket  // 当内核收到一个tcp消息时，会先提取tcp消息头中的远程及本地的地址端口信息  // 然后以该信息作为key，在ehash中找对应的socket，如果该socket存在  // 则根据这个socket的当期状态以及tcp消息的内容，对该socket做后续的逻辑处理  struct inet_ehash_bucket *ehash; // key是本地端口  // value是一个集合对象，里面存放着所有正在使用该端口的socket  // 比如监听着某个端口的服务端socket  // 比如通过某个监听端口建立tcp连接的对应的本地socket（该socket和监听socket使用同样的本地端口）  // 该hashtable的作用是为了查找某个端口是否可以被使用  // 比如在我们执行bind操作时  // 比如在我们调用connect方法，操作系统帮我们挑选本地端口时  struct inet_bind_hashbucket *bhash; // key是由本地地址和本地端口组成的二元组  // value是对应的处于监听状态中的socket  // 该hashtable的作用是，当内核收到建立tcp连接请求时  // 可以从这里快速的查找到对应的服务端监听socket  struct inet_listen_hashbucket *lhash2; // key是本地端口  // value是对应的处于监听状态中的socket  // 由于该hashtable在tcp的主体逻辑中并不会被大量使用  // 所以下文不会过多介绍  struct inet_listen_hashbucket listening_hash[INET_LHTABLE_SIZE]; }; 由上可见，tcp_hashinfo实例最主要的用途就是根据不同条件，快速查找到对应的socket。'>
 <meta property='og:url' content='https://ytcode.io/posts/linux/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%98%AF%E5%A6%82%E4%BD%95%E7%AE%A1%E7%90%86tcp%E8%BF%9E%E6%8E%A5%E7%9A%84/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Linux'><meta property='article:published_time' content='2019-10-31T14:16:49&#43;08:00'/><meta property='article:modified_time' content='2019-10-31T14:16:49&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='linux'><meta property='article:tag' content='tcp'><meta property='article:published_time' content='2019-10-31T14:16:49&#43;08:00'/><meta property='article:modified_time' content='2019-10-31T14:16:49&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.0" />
 
@@ -83,7 +83,9 @@
   <ul class='list taxonomy-cloud'><li>
         <a href='/tags/git/' style='font-size:2em'>Git</a>
       </li><li>
-        <a href='/tags/linux/' style='font-size:1em'>Linux</a>
+        <a href='/tags/linux/' style='font-size:1em'>linux</a>
+      </li><li>
+        <a href='/tags/tcp/' style='font-size:1em'>tcp</a>
       </li></ul>
 </div>
 
@@ -801,7 +803,7 @@ ok:
   <line x1="7" y1="7" x2="7" y2="7"/>
   
 </svg>
-<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/linux/'>Linux</a></div>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/linux/'>linux</a>, <a class='tag' href='/tags/tcp/'>tcp</a></div>
 
   </div>
 </footer>
