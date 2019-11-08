@@ -2,29 +2,31 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='最终命令：
-git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
-先使用下面的命令初始化一个测试用的Git仓库：
-# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
-$ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
-$ git reset HEAD^ Unstaged changes after reset: M a.'>
+<meta name='description' content='相关命令：
+# 设置Git让其在输出路径时正确显示中文 git config --global core.quotePath false # 如果是Mac用户，在执行了上述命令后还是不行 # 可以再看下Git的 core.precomposeUnicode 这个参数 情景模拟：
+先用下面的命令创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 添加一个文件 touch 中文文件名.txt 然后执行git status命令：
+$ git status On branch master Untracked files: (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed) &#34;\344\270\255\346\226\207\346\226\207\344\273\266\345\220\215.txt&#34; 由上可见，我们新添加的文件并没有以中文正确显示。
+下面我们再执行下文章开始时介绍的命令设置一下Git：
+$ git config --global core.quotePath false # 设置Git让其正确显示中文路径 $ git status # 看下设置后的结果 On branch master Untracked files: (use &#34;git add &lt;file&gt;.'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='Git示例教程 - 撤销上次提交 • wangyuntao'>
-<meta property='og:description' content='最终命令：
-git reset HEAD^ # 上次提交内容会被保存到工作目录 git reset --hard HEAD^ # 上次提交内容会被直接丢弃 情景模拟：
-先使用下面的命令初始化一个测试用的Git仓库：
-# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m 1 # 将a.txt的内容修改为A2并提交 echo A2 &gt; a.txt git commit -am 2 执行完上面的命令后，看下当前的Git日志：
-$ git -P log --pretty=oneline --abbrev-commit 4490479 (HEAD -&gt; master) 2 bf92587 1 假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：
-$ git reset HEAD^ Unstaged changes after reset: M a.'>
-<meta property='og:url' content='https://ytcode.io/posts/git/undo_last_commit/'>
+<meta property='og:title' content='Git示例教程 - 有关Git命令无法正确显示中文路径的问题 • wangyuntao'>
+<meta property='og:description' content='相关命令：
+# 设置Git让其在输出路径时正确显示中文 git config --global core.quotePath false # 如果是Mac用户，在执行了上述命令后还是不行 # 可以再看下Git的 core.precomposeUnicode 这个参数 情景模拟：
+先用下面的命令创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 添加一个文件 touch 中文文件名.txt 然后执行git status命令：
+$ git status On branch master Untracked files: (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed) &#34;\344\270\255\346\226\207\346\226\207\344\273\266\345\220\215.txt&#34; 由上可见，我们新添加的文件并没有以中文正确显示。
+下面我们再执行下文章开始时介绍的命令设置一下Git：
+$ git config --global core.quotePath false # 设置Git让其正确显示中文路径 $ git status # 看下设置后的结果 On branch master Untracked files: (use &#34;git add &lt;file&gt;.'>
+<meta property='og:url' content='https://ytcode.io/posts/git/unicode_path/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-11-08T11:43:43&#43;08:00'/><meta property='article:modified_time' content='2019-11-08T11:43:43&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.1" />
 
-  <title>Git示例教程 - 撤销上次提交 • wangyuntao</title>
-  <link rel='canonical' href='https://ytcode.io/posts/git/undo_last_commit/'>
+  <title>Git示例教程 - 有关Git命令无法正确显示中文路径的问题 • wangyuntao</title>
+  <link rel='canonical' href='https://ytcode.io/posts/git/unicode_path/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -127,7 +129,7 @@ $ git reset HEAD^ Unstaged changes after reset: M a.'>
     <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><a href='/'>微信公众号：ytcode &gt;</a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 撤销上次提交</span></li></ol>
+      <ol><li><a href='/'>微信公众号：ytcode &gt;</a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 有关Git命令无法正确显示中文路径的问题</span></li></ol>
     </nav>
   </section></div>
       </div>
@@ -146,7 +148,7 @@ $ git reset HEAD^ Unstaged changes after reset: M a.'>
   <header class='header entry-header'>
   <div class='container sep-after'>
     <div class='header-info'>
-      <h1 class='title'>Git示例教程 - 撤销上次提交</h1>
+      <h1 class='title'>Git示例教程 - 有关Git命令无法正确显示中文路径的问题</h1>
       
 
     </div>
@@ -160,7 +162,7 @@ $ git reset HEAD^ Unstaged changes after reset: M a.'>
   
 </svg>
 <span class='screen-reader-text'>Posted on </span>
-  <time class='entry-date' datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  <time class='entry-date' datetime='2019-11-08T11:43:43&#43;08:00'>2019, Nov 08</time>
 </span>
 
   <span class='byline'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
@@ -191,41 +193,40 @@ One min read
   
 
   <div class='container entry-content'>
-  <p>最终命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git reset HEAD^        <span style="color:#75715e"># 上次提交内容会被保存到工作目录</span>
-git reset --hard HEAD^ <span style="color:#75715e"># 上次提交内容会被直接丢弃</span></code></pre></div>
+  <p>相关命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 设置Git让其在输出路径时正确显示中文</span>
+git config --global core.quotePath false
+
+<span style="color:#75715e"># 如果是Mac用户，在执行了上述命令后还是不行</span>
+<span style="color:#75715e"># 可以再看下Git的 core.precomposeUnicode 这个参数</span></code></pre></div>
 <p>情景模拟：</p>
 
-<p>先使用下面的命令初始化一个测试用的Git仓库：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 初始化一个空的Git仓库</span>
-mkdir repo <span style="color:#f92672">&amp;&amp;</span> cd repo
+<p>先用下面的命令创建一个测试用的Git仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建一个空的Git仓库</span>
+mkdir repo
+cd repo
 git init
 
-<span style="color:#75715e"># 将a.txt加入到版本控制中</span>
-echo A1 &gt; a.txt
-git add .
-git commit -m <span style="color:#ae81ff">1</span>
+<span style="color:#75715e"># 添加一个文件</span>
+touch 中文文件名.txt</code></pre></div>
+<p>然后执行git status命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git status
+On branch master
+Untracked files:
+  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to include in what will be committed<span style="color:#f92672">)</span>
+  <span style="color:#e6db74">&#34;\344\270\255\346\226\207\346\226\207\344\273\266\345\220\215.txt&#34;</span></code></pre></div>
+<p>由上可见，我们新添加的文件并没有以中文正确显示。</p>
 
-<span style="color:#75715e"># 将a.txt的内容修改为A2并提交</span>
-echo A2 &gt; a.txt
-git commit -am <span style="color:#ae81ff">2</span></code></pre></div>
-<p>执行完上面的命令后，看下当前的Git日志：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --pretty<span style="color:#f92672">=</span>oneline --abbrev-commit
-<span style="color:#ae81ff">4490479</span> <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> <span style="color:#ae81ff">2</span>
-bf92587 <span style="color:#ae81ff">1</span></code></pre></div>
-<p>假设我们想撤销上次提交，但上次提交的内容不丢弃，可以使用下面的命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset HEAD^
-Unstaged changes after reset:
-M  a.txt
+<p>下面我们再执行下文章开始时介绍的命令设置一下Git：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git config --global core.quotePath false  <span style="color:#75715e"># 设置Git让其正确显示中文路径</span>
+$ git status <span style="color:#75715e"># 看下设置后的结果</span>
+On branch master
+Untracked files:
+  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to include in what will be committed<span style="color:#f92672">)</span>
+  中文文件名.txt</code></pre></div>
+<p>看到了吧，在我们设置了Git的 <em>core.quotePath</em> 参数后，中文路径就可以正确显示了。</p>
 
-$ git -P log --pretty<span style="color:#f92672">=</span>oneline --abbrev-commit
-bf92587 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span> <span style="color:#ae81ff">1</span>
-
-$ cat a.txt
-A2</code></pre></div>
-<p>由上可见，reset命令撤销了上次提交，并把这次提交的内容保存到了工作目录。</p>
-
-<p>如果我们想撤销上次提交，并且丢弃上次提交修改的内容，可以用另外一条reset命令，这个就不在这里演示了，有兴趣的同学可以自己试下。</p>
+<p>简单又实用。</p>
 
 </div>
 
@@ -253,7 +254,7 @@ A2</code></pre></div>
 
 <nav class='entry-nav'>
   <div class='container'><div class='prev-entry sep-before'>
-      <a href='/posts/git/undo_changes_to_one_file/'>
+      <a href='/posts/tool/sort/'>
         <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <line x1="20" y1="12" x2="4" y2="12"/>
@@ -261,17 +262,7 @@ A2</code></pre></div>
   
 </svg>
  Previous</span>
-        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 撤销对单个文件的修改</a>
-    </div><div class='next-entry sep-before'>
-      <a href='/posts/git/modify_last_commit/'>
-        <span class='screen-reader-text'>Next post: </span>Git示例教程 - 修改上次提交<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <line x1="4" y1="12" x2="20" y2="12"/>
-  <polyline points="14 6 20 12 14 18"/>
-  
-</svg>
-</span>
-      </a>
+        <span class='screen-reader-text'>Previous post: </span>简单实用的小命令 - sort</a>
     </div></div>
 </nav>
 
