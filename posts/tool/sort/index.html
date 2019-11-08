@@ -2,29 +2,23 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='相关命令：
-git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
-为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
-$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/master ab5a63d Initial commit  由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
-下面我们用上一篇文章中介绍过的命令，创建一个测试分支，并同步到远端：
-$ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P branch -avv b1 ab5a63d [origin/b1] Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/b1 ab5a63d Initial commit remotes/origin/master ab5a63d Initial commit 由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。'>
+<meta name='description' content='我们执行ls命令一般会有类似下面的输出：
+$ ls -lh total 1.1M -rw-r--r-- 1 yt yt 512 Nov 5 23:29 a.txt -rw-r--r-- 1 yt yt 1.0K Nov 5 23:29 b.txt -rw-r--r-- 1 yt yt 5.0K Nov 5 23:30 c.txt -rw-r--r-- 1 yt yt 1.1M Nov 5 23:31 d.txt 假设我们想对文件大小进行排序，可以用sort命令：
+$ ls -lh | sort -k 5 total 1.1M -rw-r--r-- 1 yt yt 1.0K Nov 5 23:29 b.txt -rw-r--r-- 1 yt yt 1.1M Nov 5 23:31 d.txt -rw-r--r-- 1 yt yt 5.'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='Git示例教程 - 删除本地分支及远程分支 • wangyuntao'>
-<meta property='og:description' content='相关命令：
-git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
-为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
-$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/master ab5a63d Initial commit  由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
-下面我们用上一篇文章中介绍过的命令，创建一个测试分支，并同步到远端：
-$ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P branch -avv b1 ab5a63d [origin/b1] Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&gt; origin/master remotes/origin/b1 ab5a63d Initial commit remotes/origin/master ab5a63d Initial commit 由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。'>
-<meta property='og:url' content='https://ytcode.io/posts/git/delete_branch/'>
+<meta property='og:title' content='简单实用的小命令 - sort • wangyuntao'>
+<meta property='og:description' content='我们执行ls命令一般会有类似下面的输出：
+$ ls -lh total 1.1M -rw-r--r-- 1 yt yt 512 Nov 5 23:29 a.txt -rw-r--r-- 1 yt yt 1.0K Nov 5 23:29 b.txt -rw-r--r-- 1 yt yt 5.0K Nov 5 23:30 c.txt -rw-r--r-- 1 yt yt 1.1M Nov 5 23:31 d.txt 假设我们想对文件大小进行排序，可以用sort命令：
+$ ls -lh | sort -k 5 total 1.1M -rw-r--r-- 1 yt yt 1.0K Nov 5 23:29 b.txt -rw-r--r-- 1 yt yt 1.1M Nov 5 23:31 d.txt -rw-r--r-- 1 yt yt 5.'>
+<meta property='og:url' content='https://ytcode.io/posts/tool/sort/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-28T23:02:22&#43;08:00'/><meta property='article:modified_time' content='2019-10-28T23:02:22&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='linux'><meta property='article:tag' content='tool'><meta property='article:published_time' content='2019-11-08T10:43:23&#43;08:00'/><meta property='article:modified_time' content='2019-11-08T10:43:23&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.1" />
 
-  <title>Git示例教程 - 删除本地分支及远程分支 • wangyuntao</title>
-  <link rel='canonical' href='https://ytcode.io/posts/git/delete_branch/'>
+  <title>简单实用的小命令 - sort • wangyuntao</title>
+  <link rel='canonical' href='https://ytcode.io/posts/tool/sort/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -127,7 +121,7 @@ $ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P br
     <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><a href='/'>微信公众号：ytcode &gt;</a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 删除本地分支及远程分支</span></li></ol>
+      <ol><li><a href='/'>微信公众号：ytcode &gt;</a></li><li><a href='/posts/'>文章</a></li><li><span>简单实用的小命令 - sort</span></li></ol>
     </nav>
   </section></div>
       </div>
@@ -146,7 +140,7 @@ $ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P br
   <header class='header entry-header'>
   <div class='container sep-after'>
     <div class='header-info'>
-      <h1 class='title'>Git示例教程 - 删除本地分支及远程分支</h1>
+      <h1 class='title'>简单实用的小命令 - sort</h1>
       
 
     </div>
@@ -160,7 +154,7 @@ $ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P br
   
 </svg>
 <span class='screen-reader-text'>Posted on </span>
-  <time class='entry-date' datetime='2019-10-28T23:02:22&#43;08:00'>2019, Oct 28</time>
+  <time class='entry-date' datetime='2019-11-08T10:43:23&#43;08:00'>2019, Nov 08</time>
 </span>
 
   <span class='byline'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
@@ -191,61 +185,34 @@ One min read
   
 
   <div class='container entry-content'>
-  <p>相关命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git branch -d 要删除的分支      <span style="color:#75715e"># 删除本地分支</span>
-git branch -D 要删除的分支      <span style="color:#75715e"># 强制删除本地分支</span>
-git push -d origin 要删除的分支 <span style="color:#75715e"># 删除远程分支</span></code></pre></div>
-<p>情景模拟：</p>
+  <p>我们执行ls命令一般会有类似下面的输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ls -lh
+total <span style="color:#ae81ff">1</span>.1M
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt  <span style="color:#ae81ff">512</span> Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:29 a.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">1</span>.0K Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:29 b.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">5</span>.0K Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:30 c.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">1</span>.1M Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:31 d.txt</code></pre></div>
+<p>假设我们想对文件大小进行排序，可以用sort命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ls -lh | sort -k <span style="color:#ae81ff">5</span>
+total <span style="color:#ae81ff">1</span>.1M
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">1</span>.0K Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:29 b.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">1</span>.1M Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:31 d.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">5</span>.0K Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:30 c.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt  <span style="color:#ae81ff">512</span> Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:29 a.txt</code></pre></div>
+<p>上面命令中的sort参数 -k 5 表示按第5列排序，也就是按文件大小排序。</p>
 
-<p>为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：</p>
+<p>在上面的命令中，sort虽然按文件大小列排序了，但只是按字面值排的，并没有算上单位，所以我们还要再加个参数，最终命令如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ ls -lh | sort -k <span style="color:#ae81ff">5</span> -h
+total <span style="color:#ae81ff">1</span>.1M
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt  <span style="color:#ae81ff">512</span> Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:29 a.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">1</span>.0K Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:29 b.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">5</span>.0K Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:30 c.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> yt yt <span style="color:#ae81ff">1</span>.1M Nov  <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">23</span>:31 d.txt</code></pre></div>
+<p>这次sort命令就是真正的按文件大小排序了。</p>
 
-<pre><code>$ git clone https://github.com/wangyuntao/git-test-repo.git
-Cloning into 'git-test-repo'...
-# 省略部分输出 #
-$ cd git-test-repo
-$ git -P branch -avv
-* master                ab5a63d [origin/master] Initial commit
-  remotes/origin/HEAD   -&gt; origin/master
-  remotes/origin/master ab5a63d Initial commit
-</code></pre>
+<p>sort命令还可以对很多内容，按很多方式进行排序，我们这里只是以ls命令的输出作为示例简单的介绍了下。</p>
 
-<p>由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。</p>
-
-<p>下面我们用<a href="create_branch.md" target="_blank">上一篇文章</a>中介绍过的命令，创建一个测试分支，并同步到远端：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git branch b1
-$ git push --set-upstream origin b1
-<span style="color:#75715e"># 省略输出 #</span>
-$ git -P branch -avv
-  b1                    ab5a63d <span style="color:#f92672">[</span>origin/b1<span style="color:#f92672">]</span> Initial commit
-* master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
-  remotes/origin/HEAD   -&gt; origin/master
-  remotes/origin/b1     ab5a63d Initial commit
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。</p>
-
-<p>下面我们来测试下对应的删除命令。</p>
-
-<p>先删除本地分支：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git branch -d b1   <span style="color:#75715e"># 删除本地分支b1</span>
-Deleted branch b1 <span style="color:#f92672">(</span>was ab5a63d<span style="color:#f92672">)</span>.
-$ git -P branch -avv <span style="color:#75715e"># 查看当前分支情况</span>
-* master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
-  remotes/origin/HEAD   -&gt; origin/master
-  remotes/origin/b1     ab5a63d Initial commit
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>由上可见，本地的b1分支已经没有了，但其对应的远程分支origin/b1还在。</p>
-
-<p>我们再用下面的命令删除其对应的远程分支：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git push -d origin b1 <span style="color:#75715e"># 删除远端的b1分支</span>
-To https://github.com/wangyuntao/git-test-repo.git
- - <span style="color:#f92672">[</span>deleted<span style="color:#f92672">]</span>         b1
-$ git -P branch -avv    <span style="color:#75715e"># 查看当前的分支情况</span>
-* master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
-  remotes/origin/HEAD   -&gt; origin/master
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>由上可见，b1对应的远程分支origin/b1也被删除了，此时如果我们到GitHub上看一下的话，也会发现，b1分支已经没有了。</p>
-
-<p>好了，到这里有关本地分支及远程分支的删除操作就已经讲完了，希望对你有所帮助。</p>
+<p>建议大家都看看sort命令的man文档，很简单。</p>
 
 </div>
 
@@ -256,14 +223,14 @@ $ git -P branch -avv    <span style="color:#75715e"># 查看当前的分支情�
   <path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z"/>
   
 </svg>
-<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/git%E7%A4%BA%E4%BE%8B%E6%95%99%E7%A8%8B/'>Git示例教程</a></div>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/categories/%E5%B7%A5%E5%85%B7/'>工具</a></div>
 <div class='tags'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z"/>
   <line x1="7" y1="7" x2="7" y2="7"/>
   
 </svg>
-<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/git/'>Git</a></div>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/tags/linux/'>linux</a>, <a class='tag' href='/tags/tool/'>tool</a></div>
 
   </div>
 </footer>
@@ -273,7 +240,7 @@ $ git -P branch -avv    <span style="color:#75715e"># 查看当前的分支情�
 
 <nav class='entry-nav'>
   <div class='container'><div class='prev-entry sep-before'>
-      <a href='/posts/git/create_branch/'>
+      <a href='/posts/git/rebase/'>
         <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <line x1="20" y1="12" x2="4" y2="12"/>
@@ -281,17 +248,7 @@ $ git -P branch -avv    <span style="color:#75715e"># 查看当前的分支情�
   
 </svg>
  Previous</span>
-        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 创建本地分支及远程分支</a>
-    </div><div class='next-entry sep-before'>
-      <a href='/posts/git/branch_sync/'>
-        <span class='screen-reader-text'>Next post: </span>Git示例教程 - 同步本地分支的添加删除状态到远程（或反之）<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <line x1="4" y1="12" x2="20" y2="12"/>
-  <polyline points="14 6 20 12 14 18"/>
-  
-</svg>
-</span>
-      </a>
+        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 如何使用git rebase命令</a>
     </div></div>
 </nav>
 
