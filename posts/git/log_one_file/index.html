@@ -2,27 +2,25 @@
 <html lang='en'><head>
   <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'>
-<meta name='description' content='最终命令：
-git checkout HEAD a.txt # 撤销对a.txt文件的修改 git restore --source=HEAD --staged --worktree a.txt # 也可以使用这个命令 情景模拟：
-先使用下面的命令初始化一个测试用的Git仓库：
-# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m init # 修改a.txt，并把这次修改加入到Git的staging area中 echo A2 &gt;&gt; a.txt git add . # 修改a.txt，不把这次修改加入到Git的staging area中 echo A3 &gt;&gt; a.txt 执行完上面的命令后，看下该Git仓库的当前状态：
-$ git status On branch master Changes to be committed: (use &#34;git restore --staged &lt;file&gt;.'>
+<meta name='description' content='相关命令：
+git log --follow -p 想要查看的文件 情景模拟：
+先用下面的命令创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 第一次提交 echo a1 &gt; a.txt echo b1 &gt; b.txt git add . git commit -m 1 # 第二次提交 echo b2 &gt;&gt; b.txt git add . git commit -m 2 # 第三次提交 mv a.txt a.md echo a3 &gt;&gt; a.md git add . git commit -m 3 # 第四次提交 echo a4 &gt;&gt; a.md echo b4 &gt;&gt; b.'>
 <meta name='theme-color' content='#ffcd00'>
 
-<meta property='og:title' content='Git示例教程 - 撤销对单个文件的修改 • wangyuntao'>
-<meta property='og:description' content='最终命令：
-git checkout HEAD a.txt # 撤销对a.txt文件的修改 git restore --source=HEAD --staged --worktree a.txt # 也可以使用这个命令 情景模拟：
-先使用下面的命令初始化一个测试用的Git仓库：
-# 初始化一个空的Git仓库 mkdir repo &amp;&amp; cd repo git init # 将a.txt加入到版本控制中 echo A1 &gt; a.txt git add . git commit -m init # 修改a.txt，并把这次修改加入到Git的staging area中 echo A2 &gt;&gt; a.txt git add . # 修改a.txt，不把这次修改加入到Git的staging area中 echo A3 &gt;&gt; a.txt 执行完上面的命令后，看下该Git仓库的当前状态：
-$ git status On branch master Changes to be committed: (use &#34;git restore --staged &lt;file&gt;.'>
-<meta property='og:url' content='https://ytcode.io/posts/git/undo_changes_to_one_file/'>
+<meta property='og:title' content='Git示例教程 - 查看指定文件的历史修改记录 • wangyuntao'>
+<meta property='og:description' content='相关命令：
+git log --follow -p 想要查看的文件 情景模拟：
+先用下面的命令创建一个测试用的Git仓库：
+# 创建一个空的Git仓库 mkdir repo cd repo git init # 第一次提交 echo a1 &gt; a.txt echo b1 &gt; b.txt git add . git commit -m 1 # 第二次提交 echo b2 &gt;&gt; b.txt git add . git commit -m 2 # 第三次提交 mv a.txt a.md echo a3 &gt;&gt; a.md git add . git commit -m 3 # 第四次提交 echo a4 &gt;&gt; a.md echo b4 &gt;&gt; b.'>
+<meta property='og:url' content='https://ytcode.io/posts/git/log_one_file/'>
 <meta property='og:site_name' content='技术闲聊'>
-<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-11-21T18:35:37&#43;08:00'/><meta property='article:modified_time' content='2019-11-21T18:35:37&#43;08:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.59.1" />
 
-  <title>Git示例教程 - 撤销对单个文件的修改 • wangyuntao</title>
-  <link rel='canonical' href='https://ytcode.io/posts/git/undo_changes_to_one_file/'>
+  <title>Git示例教程 - 查看指定文件的历史修改记录 • wangyuntao</title>
+  <link rel='canonical' href='https://ytcode.io/posts/git/log_one_file/'>
   
   
   <link rel='icon' href='/favicon.ico'>
@@ -125,7 +123,7 @@ $ git status On branch master Changes to be committed: (use &#34;git restore --s
     <style>.widget-breadcrumbs li:after{content:'\2f '}</style>
   <section class='widget widget-breadcrumbs sep-after'>
     <nav id='breadcrumbs'>
-      <ol><li><a href='/'>微信公众号：ytcode &gt;</a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 撤销对单个文件的修改</span></li></ol>
+      <ol><li><a href='/'>微信公众号：ytcode &gt;</a></li><li><a href='/posts/'>文章</a></li><li><span>Git示例教程 - 查看指定文件的历史修改记录</span></li></ol>
     </nav>
   </section></div>
       </div>
@@ -144,7 +142,7 @@ $ git status On branch master Changes to be committed: (use &#34;git restore --s
   <header class='header entry-header'>
   <div class='container sep-after'>
     <div class='header-info'>
-      <h1 class='title'>Git示例教程 - 撤销对单个文件的修改</h1>
+      <h1 class='title'>Git示例教程 - 查看指定文件的历史修改记录</h1>
       
 
     </div>
@@ -158,7 +156,7 @@ $ git status On branch master Changes to be committed: (use &#34;git restore --s
   
 </svg>
 <span class='screen-reader-text'>Posted on </span>
-  <time class='entry-date' datetime='2019-10-27T18:02:27&#43;08:00'>2019, Oct 27</time>
+  <time class='entry-date' datetime='2019-11-21T18:35:37&#43;08:00'>2019, Nov 21</time>
 </span>
 
   <span class='byline'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
@@ -189,49 +187,88 @@ One min read
   
 
   <div class='container entry-content'>
-  <p>最终命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git checkout HEAD a.txt                             <span style="color:#75715e"># 撤销对a.txt文件的修改</span>
-git restore --source<span style="color:#f92672">=</span>HEAD --staged --worktree a.txt <span style="color:#75715e"># 也可以使用这个命令</span></code></pre></div>
+  <p>相关命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git log --follow -p 想要查看的文件</code></pre></div>
 <p>情景模拟：</p>
 
-<p>先使用下面的命令初始化一个测试用的Git仓库：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 初始化一个空的Git仓库</span>
-mkdir repo <span style="color:#f92672">&amp;&amp;</span> cd repo
+<p>先用下面的命令创建一个测试用的Git仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建一个空的Git仓库</span>
+mkdir repo
+cd repo
 git init
 
-<span style="color:#75715e"># 将a.txt加入到版本控制中</span>
-echo A1 &gt; a.txt
+<span style="color:#75715e"># 第一次提交</span>
+echo a1 &gt; a.txt
+echo b1 &gt; b.txt
 git add .
-git commit -m init
+git commit -m <span style="color:#ae81ff">1</span>
 
-<span style="color:#75715e"># 修改a.txt，并把这次修改加入到Git的staging area中</span>
-echo A2 &gt;&gt; a.txt
+<span style="color:#75715e"># 第二次提交</span>
+echo b2 &gt;&gt; b.txt
 git add .
+git commit -m <span style="color:#ae81ff">2</span>
 
-<span style="color:#75715e"># 修改a.txt，不把这次修改加入到Git的staging area中</span>
-echo A3 &gt;&gt; a.txt</code></pre></div>
-<p>执行完上面的命令后，看下该Git仓库的当前状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git status
-On branch master
-Changes to be committed:
-  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git restore --staged &lt;file&gt;...&#34;</span> to unstage<span style="color:#f92672">)</span>
-	modified:   a.txt
+<span style="color:#75715e"># 第三次提交</span>
+mv a.txt a.md
+echo a3 &gt;&gt; a.md
+git add .
+git commit -m <span style="color:#ae81ff">3</span>
 
-Changes not staged <span style="color:#66d9ef">for</span> commit:
-  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to update what will be committed<span style="color:#f92672">)</span>
-  <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git restore &lt;file&gt;...&#34;</span> to discard changes in working directory<span style="color:#f92672">)</span>
-	modified:   a.txt</code></pre></div>
-<p>现在我们想撤销对a.txt文件的修改，可执行如下命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git checkout HEAD a.txt
-Updated <span style="color:#ae81ff">1</span> path from b5ab058
+<span style="color:#75715e"># 第四次提交</span>
+echo a4 &gt;&gt; a.md
+echo b4 &gt;&gt; b.txt
+git add .
+git commit -m <span style="color:#ae81ff">4</span></code></pre></div>
+<p>假设我们想要查看a.md文件的历史修改记录，可以执行下面的命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P log --follow -p a.md
+commit ab81ba50598e91fbe7985ab2d76351fcb3a6db90 <span style="color:#f92672">(</span>HEAD -&gt; master<span style="color:#f92672">)</span>
+Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+Date:   Thu Nov <span style="color:#ae81ff">21</span> <span style="color:#ae81ff">18</span>:20:37 <span style="color:#ae81ff">2019</span> +0800
 
-$ git status
-On branch master
-nothing to commit, working tree clean
+    <span style="color:#ae81ff">4</span>
 
-$ cat a.txt
-A1</code></pre></div>
-<p>由上可见，checkout命令撤销了对a.txt文件的所有修改，包括staging area中的修改。</p>
+diff --git a/a.md b/a.md
+index 76642d4..2caff4f <span style="color:#ae81ff">100644</span>
+--- a/a.md
++++ b/a.md
+@@ -1,2 +1,3 @@
+ a1
+ a3
++a4
+
+commit 1714c5b6c581ea9b9d43d03702f2d650d30bb681
+Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+Date:   Thu Nov <span style="color:#ae81ff">21</span> <span style="color:#ae81ff">18</span>:20:37 <span style="color:#ae81ff">2019</span> +0800
+
+    <span style="color:#ae81ff">3</span>
+
+diff --git a/a.txt b/a.md
+similarity index <span style="color:#ae81ff">50</span>%
+rename from a.txt
+rename to a.md
+index da0f8ed..76642d4 <span style="color:#ae81ff">100644</span>
+--- a/a.txt
++++ b/a.md
+@@ -1 +1,2 @@
+ a1
++a3
+
+commit f550041c84c33140f8f6da910bf961f002827c99
+Author: wangyuntao &lt;wyt.daily@gmail.com&gt;
+Date:   Thu Nov <span style="color:#ae81ff">21</span> <span style="color:#ae81ff">18</span>:20:37 <span style="color:#ae81ff">2019</span> +0800
+
+    <span style="color:#ae81ff">1</span>
+
+diff --git a/a.txt b/a.txt
+new file mode <span style="color:#ae81ff">100644</span>
+index <span style="color:#ae81ff">0000000</span>..da0f8ed
+--- /dev/null
++++ b/a.txt
+@@ -0,0 +1 @@
++a1</code></pre></div>
+<p>由上可见，该命令正确输出了所有修改了a.md文件的提交，包括第三次提交中把a.txt改名为a.md。</p>
+
+<p>有了这个命令，以后再想查看一个bug是什么时候以及谁写的，就非常方便了。</p>
 
 </div>
 
@@ -259,7 +296,7 @@ A1</code></pre></div>
 
 <nav class='entry-nav'>
   <div class='container'><div class='prev-entry sep-before'>
-      <a href='/posts/git/undo_changes_to_all_files/'>
+      <a href='/posts/git/show/'>
         <span aria-hidden='true'><svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
   
   <line x1="20" y1="12" x2="4" y2="12"/>
@@ -267,17 +304,7 @@ A1</code></pre></div>
   
 </svg>
  Previous</span>
-        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 撤销对所有文件的修改</a>
-    </div><div class='next-entry sep-before'>
-      <a href='/posts/git/undo_last_commit/'>
-        <span class='screen-reader-text'>Next post: </span>Git示例教程 - 撤销上次提交<span aria-hidden='true'>Next <svg class='icon' viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
-  
-  <line x1="4" y1="12" x2="20" y2="12"/>
-  <polyline points="14 6 20 12 14 18"/>
-  
-</svg>
-</span>
-      </a>
+        <span class='screen-reader-text'>Previous post: </span>Git示例教程 - 查看指定提交的修改内容</a>
     </div></div>
 </nav>
 
