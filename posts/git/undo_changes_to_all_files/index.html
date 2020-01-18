@@ -21,7 +21,7 @@ $ git status -s M f1.txt ?? f2.txt $ git -P diff diff --git a/f1.'>
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
 
-<meta name="generator" content="Hugo 0.59.1" />
+<meta name="generator" content="Hugo 0.62.2" />
 
   <title>Git示例教程 - 撤销对所有文件的修改 • wangyuntao</title>
   <link rel='canonical' href='https://ytcode.io/posts/git/undo_changes_to_all_files/'>
@@ -87,6 +87,8 @@ $ git status -s M f1.txt ?? f2.txt $ git -P diff diff --git a/f1.'>
 
   <div class='container list-container'>
   <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/c/' style='font-size:1em'>c</a>
+      </li><li>
         <a href='/tags/git/' style='font-size:2em'>Git</a>
       </li><li>
         <a href='/tags/linux/' style='font-size:1.0714285714285714em'>linux</a>
@@ -193,9 +195,8 @@ One min read
   <div class='container entry-content'>
   <p>最终命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset --hard <span style="color:#75715e"># 撤销所有文件的修改（不算未进入版本控制的文件）</span>
-$ git clean -fd    <span style="color:#75715e"># 删除所有未进入版本控制的文件</span></code></pre></div>
-<p>下面用一个例子展示下这两个命令的使用。</p>
-
+$ git clean -fd    <span style="color:#75715e"># 删除所有未进入版本控制的文件</span>
+</code></pre></div><p>下面用一个例子展示下这两个命令的使用。</p>
 <p>先用下面的命令初始化一个测试用的Git仓库：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ mkdir repo
 $ cd repo
@@ -206,9 +207,8 @@ $ git add .
 $ git commit -m f1 <span style="color:#75715e"># 将f1.txt加入到版本控制中</span>
 
 $ echo b &gt; f1.txt  <span style="color:#75715e"># 修改f1.txt的内容</span>
-$ touch f2.txt     <span style="color:#75715e"># 创建新文件f2.txt，其并未进入到版本控制中</span></code></pre></div>
-<p>执行完上面的命令后，我们已经有了一个可供测试的Git仓库。</p>
-
+$ touch f2.txt     <span style="color:#75715e"># 创建新文件f2.txt，其并未进入到版本控制中</span>
+</code></pre></div><p>执行完上面的命令后，我们已经有了一个可供测试的Git仓库。</p>
 <p>再用下面的命令看下文件的变化情况：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git status -s
  M f1.txt
@@ -216,14 +216,13 @@ $ touch f2.txt     <span style="color:#75715e"># 创建新文件f2.txt，其并�
 
 $ git -P diff
 diff --git a/f1.txt b/f1.txt
-index <span style="color:#ae81ff">7898192</span>..6178079 <span style="color:#ae81ff">100644</span>
+index 7898192..6178079 <span style="color:#ae81ff">100644</span>
 --- a/f1.txt
 +++ b/f1.txt
 @@ -1 +1 @@
 -a
-+b</code></pre></div>
-<p>由上可见，f1.txt的内容由a变为了b，f2.txt是新创建的，还未进入到版本控制中。</p>
-
++b
+</code></pre></div><p>由上可见，f1.txt的内容由a变为了b，f2.txt是新创建的，还未进入到版本控制中。</p>
 <p>现在执行上面的撤销命令，看下是如何撤销修改的：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git reset --hard
 HEAD is now at 5b3c640 f1
@@ -236,11 +235,9 @@ Removing f2.txt
 
 $ git status
 On branch master
-nothing to commit, working tree clean</code></pre></div>
-<p>由上可见，执行完reset命令后，f1.txt文件的修改被撤销，但f2.txt文件还在。</p>
-
+nothing to commit, working tree clean
+</code></pre></div><p>由上可见，执行完reset命令后，f1.txt文件的修改被撤销，但f2.txt文件还在。</p>
 <p>执行完clean命令后，f2.txt文件也不在了。</p>
-
 <p>至此，两条命令撤销了对所有文件的修改，Git仓库回到了原始状态。</p>
 
 </div>
@@ -332,7 +329,7 @@ nothing to commit, working tree clean</code></pre></div>
       </li></ul>
   </nav>
 </section><div class='copyright'>
-  <p> &copy; 2017-2019 wangyuntao </p>
+  <p> &copy; 2017-2020 wangyuntao </p>
 </div>
 
         </div>

@@ -4,7 +4,7 @@
   
   <url>
     <loc>https://ytcode.io/posts/</loc>
-    <lastmod>2019-11-21T18:35:37+08:00</lastmod>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
   </url>
   
   <url>
@@ -13,12 +13,42 @@
   
   <url>
     <loc>https://ytcode.io/authors/</loc>
-    <lastmod>2019-11-21T18:35:37+08:00</lastmod>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ytcode.io/tags/c/</loc>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://ytcode.io/categories/</loc>
-    <lastmod>2019-11-21T18:35:37+08:00</lastmod>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ytcode.io/categories/gcc/</loc>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ytcode.io/posts/c/gcc_assembly/</loc>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ytcode.io/tags/</loc>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ytcode.io/authors/wangyuntao/</loc>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ytcode.io/</loc>
+    <lastmod>2020-01-18T14:58:12+08:00</lastmod>
   </url>
   
   <url>
@@ -33,21 +63,6 @@
   
   <url>
     <loc>https://ytcode.io/posts/git/log_one_file/</loc>
-    <lastmod>2019-11-21T18:35:37+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ytcode.io/tags/</loc>
-    <lastmod>2019-11-21T18:35:37+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ytcode.io/authors/wangyuntao/</loc>
-    <lastmod>2019-11-21T18:35:37+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://ytcode.io/</loc>
     <lastmod>2019-11-21T18:35:37+08:00</lastmod>
   </url>
   

@@ -19,7 +19,7 @@ $ git status On branch master Changes to be committed: (use &#34;git restore --s
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-27T18:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-27T18:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
 
-<meta name="generator" content="Hugo 0.59.1" />
+<meta name="generator" content="Hugo 0.62.2" />
 
   <title>Git示例教程 - 撤销对单个文件的修改 • wangyuntao</title>
   <link rel='canonical' href='https://ytcode.io/posts/git/undo_changes_to_one_file/'>
@@ -85,6 +85,8 @@ $ git status On branch master Changes to be committed: (use &#34;git restore --s
 
   <div class='container list-container'>
   <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/c/' style='font-size:1em'>c</a>
+      </li><li>
         <a href='/tags/git/' style='font-size:2em'>Git</a>
       </li><li>
         <a href='/tags/linux/' style='font-size:1.0714285714285714em'>linux</a>
@@ -191,9 +193,8 @@ One min read
   <div class='container entry-content'>
   <p>最终命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git checkout HEAD a.txt                             <span style="color:#75715e"># 撤销对a.txt文件的修改</span>
-git restore --source<span style="color:#f92672">=</span>HEAD --staged --worktree a.txt <span style="color:#75715e"># 也可以使用这个命令</span></code></pre></div>
-<p>情景模拟：</p>
-
+git restore --source<span style="color:#f92672">=</span>HEAD --staged --worktree a.txt <span style="color:#75715e"># 也可以使用这个命令</span>
+</code></pre></div><p>情景模拟：</p>
 <p>先使用下面的命令初始化一个测试用的Git仓库：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 初始化一个空的Git仓库</span>
 mkdir repo <span style="color:#f92672">&amp;&amp;</span> cd repo
@@ -209,8 +210,8 @@ echo A2 &gt;&gt; a.txt
 git add .
 
 <span style="color:#75715e"># 修改a.txt，不把这次修改加入到Git的staging area中</span>
-echo A3 &gt;&gt; a.txt</code></pre></div>
-<p>执行完上面的命令后，看下该Git仓库的当前状态：</p>
+echo A3 &gt;&gt; a.txt
+</code></pre></div><p>执行完上面的命令后，看下该Git仓库的当前状态：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git status
 On branch master
 Changes to be committed:
@@ -220,8 +221,8 @@ Changes to be committed:
 Changes not staged <span style="color:#66d9ef">for</span> commit:
   <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to update what will be committed<span style="color:#f92672">)</span>
   <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git restore &lt;file&gt;...&#34;</span> to discard changes in working directory<span style="color:#f92672">)</span>
-	modified:   a.txt</code></pre></div>
-<p>现在我们想撤销对a.txt文件的修改，可执行如下命令：</p>
+	modified:   a.txt
+</code></pre></div><p>现在我们想撤销对a.txt文件的修改，可执行如下命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ git checkout HEAD a.txt
 Updated <span style="color:#ae81ff">1</span> path from b5ab058
 
@@ -230,8 +231,8 @@ On branch master
 nothing to commit, working tree clean
 
 $ cat a.txt
-A1</code></pre></div>
-<p>由上可见，checkout命令撤销了对a.txt文件的所有修改，包括staging area中的修改。</p>
+A1
+</code></pre></div><p>由上可见，checkout命令撤销了对a.txt文件的所有修改，包括staging area中的修改。</p>
 
 </div>
 
@@ -332,7 +333,7 @@ A1</code></pre></div>
       </li></ul>
   </nav>
 </section><div class='copyright'>
-  <p> &copy; 2017-2019 wangyuntao </p>
+  <p> &copy; 2017-2020 wangyuntao </p>
 </div>
 
         </div>

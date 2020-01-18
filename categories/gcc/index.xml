@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gcc on 技术闲聊</title>
+    <link>https://ytcode.io/categories/gcc/</link>
+    <description>Recent content in gcc on 技术闲聊</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 18 Jan 2020 14:58:12 +0800</lastBuildDate>
+    
+	<atom:link href="https://ytcode.io/categories/gcc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>gcc编译时文件扩展名为.S和.s的区别</title>
+      <link>https://ytcode.io/posts/c/gcc_assembly/</link>
+      <pubDate>Sat, 18 Jan 2020 14:58:12 +0800</pubDate>
+      
+      <guid>https://ytcode.io/posts/c/gcc_assembly/</guid>
+      <description>gcc编译时，文件扩展名为.S和.s的区别是，.S支持预处理，而.s不支持。
+gcc编译一般分为四个阶段，分别是预处理、编译、汇编、链接。
+下面我们用一个小例子看下这四个阶段的作用，示例代码：
+$ ls lib.c lib.h main.c $ cat lib.h #ifndef __LIB_H#define __LIB_H extern int add(int a, int b); #endif /* __LIB_H */ $ cat lib.c #include &amp;#34;lib.h&amp;#34; int add(int a, int b) { return a + b; } $ cat main.c #include &amp;#34;lib.h&amp;#34; #define A 1#define B 2 int main() { return add(A, B); } 预处理的作用是宏展开和头文件替换：
+$ gcc -E main.c -o main.i $ cat main.i // 删除一些无关内容 extern int add(int a, int b); int main() { return add(1, 2); } 编译的作用是把c代码转成汇编代码：</description>
+    </item>
+    
+  </channel>
+</rss>

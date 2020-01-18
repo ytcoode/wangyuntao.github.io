@@ -21,7 +21,7 @@ $ git -P diff # 参数-P可以不管，下同 diff --git a/a.txt b/a.txt index d
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-30T18:02:21&#43;08:00'/><meta property='article:modified_time' content='2019-10-30T18:02:21&#43;08:00'/><meta name='twitter:card' content='summary'>
 
-<meta name="generator" content="Hugo 0.59.1" />
+<meta name="generator" content="Hugo 0.62.2" />
 
   <title>Git示例教程 - 灵活使用git diff命令 • wangyuntao</title>
   <link rel='canonical' href='https://ytcode.io/posts/git/diff/'>
@@ -87,6 +87,8 @@ $ git -P diff # 参数-P可以不管，下同 diff --git a/a.txt b/a.txt index d
 
   <div class='container list-container'>
   <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/c/' style='font-size:1em'>c</a>
+      </li><li>
         <a href='/tags/git/' style='font-size:2em'>Git</a>
       </li><li>
         <a href='/tags/linux/' style='font-size:1.0714285714285714em'>linux</a>
@@ -199,9 +201,8 @@ git diff
 git diff --staged
 
 <span style="color:#75715e"># 比较任意两次提交指向内容的区别</span>
-git diff &lt;commit&gt; &lt;commit&gt;</code></pre></div>
-<p>情景模拟：</p>
-
+git diff &lt;commit&gt; &lt;commit&gt;
+</code></pre></div><p>情景模拟：</p>
 <p>先执行下面的命令，创建一个测试用的Git仓库：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建一个空的Git仓库</span>
 mkdir repo
@@ -211,10 +212,10 @@ git init
 <span style="color:#75715e"># 提交一次</span>
 echo a1 &gt; a.txt
 git add .
-git commit -m <span style="color:#e6db74">&#34;Initial commit&#34;</span></code></pre></div>
-<p>然后再执行下面的命令，对a.txt文件做一些修改：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">echo a2 &gt; a.txt</code></pre></div>
-<p>最后我们执行两次diff命令（参数不一样），看下输出有什么不同：</p>
+git commit -m <span style="color:#e6db74">&#34;Initial commit&#34;</span>
+</code></pre></div><p>然后再执行下面的命令，对a.txt文件做一些修改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">echo a2 &gt; a.txt
+</code></pre></div><p>最后我们执行两次diff命令（参数不一样），看下输出有什么不同：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P diff <span style="color:#75715e"># 参数-P可以不管，下同</span>
 diff --git a/a.txt b/a.txt
 index da0f8ed..c1827f0 <span style="color:#ae81ff">100644</span>
@@ -224,13 +225,10 @@ index da0f8ed..c1827f0 <span style="color:#ae81ff">100644</span>
 -a1
 +a2
 
-$ git -P diff --staged <span style="color:#75715e"># 没有任何输出</span></code></pre></div>
-<p>由上可见，没有&ndash;staged参数的diff命令输出了文件变化，而有&ndash;staged参数的diff命令没有任何输出，即表示没有任何变化。</p>
-
+$ git -P diff --staged <span style="color:#75715e"># 没有任何输出</span>
+</code></pre></div><p>由上可见，没有&ndash;staged参数的diff命令输出了文件变化，而有&ndash;staged参数的diff命令没有任何输出，即表示没有任何变化。</p>
 <p>这是因为，没有&ndash;staged参数的diff命令比较的是工作区和Git的staging area里的内容的区别，因为我们上面修改了a.txt文件，即工作区里的内容变化了，但此时Git的staging area里的内容并没有任何变化，即还是原内容，所以该次diff命令就正确输出了我们对a.txt文件的修改。</p>
-
 <p>而有&ndash;staged参数的diff命令比较的是Git的staging area和当前分支指向的内容的区别，因为此时这两个地方的内容都没有变化，所以该次diff命令没有任何输出。</p>
-
 <p>我们再执行下面的命令，看下这次不同的diff命令有怎样的输出：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git add a.txt <span style="color:#75715e"># 将a.txt的修改提交到Git的staging area</span>
 $ git -P diff   <span style="color:#75715e"># 没有任何输出</span>
@@ -241,40 +239,27 @@ index da0f8ed..c1827f0 <span style="color:#ae81ff">100644</span>
 +++ b/a.txt
 @@ -1 +1 @@
 -a1
-+a2</code></pre></div>
-<p>这次的结果正好反过来了，有&ndash;staged参数的diff命令有输出，而没有&ndash;staged参数的diff命令没有输出。</p>
-
++a2
+</code></pre></div><p>这次的结果正好反过来了，有&ndash;staged参数的diff命令有输出，而没有&ndash;staged参数的diff命令没有输出。</p>
 <p>这是因为通过上面的git add命令，工作区里的文件内容已经同步到了Git的staging area里，所以此时这两个地方的文件内容是一样的，这样就导致了第一次diff命令没有任何输出。</p>
-
 <p>但正是因为这次同步导致的Git的staging area里的内容变化，使其和当前分支指向的内容不再相同（当前分支指向的还是原内容），所以有第二次diff命令就有了输出。</p>
-
 <p>继续上面的例子，我们再执行下面的命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git commit -m <span style="color:#ae81ff">1</span>
 <span style="color:#f92672">[</span>master 867736c<span style="color:#f92672">]</span> <span style="color:#ae81ff">1</span>
  <span style="color:#ae81ff">1</span> file changed, <span style="color:#ae81ff">1</span> insertion<span style="color:#f92672">(</span>+<span style="color:#f92672">)</span>, <span style="color:#ae81ff">1</span> deletion<span style="color:#f92672">(</span>-<span style="color:#f92672">)</span>
  
 $ git -P diff          <span style="color:#75715e"># 无任何输出</span>
-$ git -P diff --staged <span style="color:#75715e"># 无任何输出</span></code></pre></div>
-<p>因为这次先执行了git commit命令，导致staging area里的内容被同步到了Git仓库里，所以这两次diff命令都没有任何输出。</p>
-
+$ git -P diff --staged <span style="color:#75715e"># 无任何输出</span>
+</code></pre></div><p>因为这次先执行了git commit命令，导致staging area里的内容被同步到了Git仓库里，所以这两次diff命令都没有任何输出。</p>
 <p>注意，我们在描述git add和git commit命令时，用的都是同步文件内容到下一个区域，而不是添加这次的修改到下一个区域，这个概念是很重要的。</p>
-
 <p>Git在进行版本管理时，保存文件的地方分为三个区域，分别是工作区、staging area 和 Git仓库，我们要把这三个区域都想像成各自保存了所有文件的一份拷贝，而不是存放的一次次提交的零散的变化。</p>
-
 <p>当我们修改文件时，我们改动的是工作区里的内容。</p>
-
 <p>当我们执行git add命令时，我们是把对工作区的修改同步到了staging area里，使其当前内容和工作区内容相同。</p>
-
 <p>当我们执行git commit命令时，我们是把staging area里变动的部分同步到了Git仓库里，使Git仓库里的内容和工作区以及staging area里的内容都相同。</p>
-
 <p>所有命令的执行，目的都是将上一区域里变化的内容同步到下一区域，使这两个区域之间的内容完全相同。</p>
-
 <p>用这种方式思考Git的版本管理机制，对于我们日后理解Git的各种命令有非常大的帮助。</p>
-
 <p>话题太大，这里就不再展开了。</p>
-
 <p>最后我们再来看下不同提交之间的比较是什么样子的。</p>
-
 <p>我们先在当前Git仓库的基础上继续执行下面的命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建并切换到分支b</span>
 git checkout -b b
@@ -288,8 +273,8 @@ git checkout -
 
 <span style="color:#75715e"># 在master分支上再连续提交两次</span>
 echo m1 &gt; a.txt <span style="color:#f92672">&amp;&amp;</span>  git commit -am m1
-echo m2 &gt;&gt; a.txt <span style="color:#f92672">&amp;&amp;</span> git commit -am m2</code></pre></div>
-<p>执行完上述命令后，我们用下面的命令比较下当前b分支和master分支的区别：</p>
+echo m2 &gt;&gt; a.txt <span style="color:#f92672">&amp;&amp;</span> git commit -am m2
+</code></pre></div><p>执行完上述命令后，我们用下面的命令比较下当前b分支和master分支的区别：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git -P diff master b
 diff --git a/a.txt b/a.txt
 index b5692e5..9b89cd5 <span style="color:#ae81ff">100644</span>
@@ -299,13 +284,10 @@ index b5692e5..9b89cd5 <span style="color:#ae81ff">100644</span>
 -m1
 -m2
 +b1
-+b2</code></pre></div>
-<p>看到了吧，这次的diff命令清晰的显示了两个分支对a.txt做的修改，以及他们导致的冲突。</p>
-
++b2
+</code></pre></div><p>看到了吧，这次的diff命令清晰的显示了两个分支对a.txt做的修改，以及他们导致的冲突。</p>
 <p>该命令在分支合并时是非常有用的，我们可以使用该命令在合并前看下被合并分支对当前分支的文件内容做了哪些修改。</p>
-
 <p>git diff命令还有很多更好玩和更加强大的执行方式，限于篇幅原因，这里就不一一指出了，有兴趣的同学可以看下Git自带的文档，执行 <code>git help diff</code> 就可以看到了。</p>
-
 <p>完。</p>
 
 </div>
@@ -407,7 +389,7 @@ index b5692e5..9b89cd5 <span style="color:#ae81ff">100644</span>
       </li></ul>
   </nav>
 </section><div class='copyright'>
-  <p> &copy; 2017-2019 wangyuntao </p>
+  <p> &copy; 2017-2020 wangyuntao </p>
 </div>
 
         </div>

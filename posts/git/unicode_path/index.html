@@ -23,7 +23,7 @@ $ git config --global core.quotePath false # 设置Git让其正确显示中文�
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-11-08T11:43:43&#43;08:00'/><meta property='article:modified_time' content='2019-11-08T11:43:43&#43;08:00'/><meta name='twitter:card' content='summary'>
 
-<meta name="generator" content="Hugo 0.59.1" />
+<meta name="generator" content="Hugo 0.62.2" />
 
   <title>Git示例教程 - 有关Git命令无法正确显示中文路径的问题 • wangyuntao</title>
   <link rel='canonical' href='https://ytcode.io/posts/git/unicode_path/'>
@@ -89,6 +89,8 @@ $ git config --global core.quotePath false # 设置Git让其正确显示中文�
 
   <div class='container list-container'>
   <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/c/' style='font-size:1em'>c</a>
+      </li><li>
         <a href='/tags/git/' style='font-size:2em'>Git</a>
       </li><li>
         <a href='/tags/linux/' style='font-size:1.0714285714285714em'>linux</a>
@@ -198,9 +200,8 @@ One min read
 git config --global core.quotePath false
 
 <span style="color:#75715e"># 如果是Mac用户，在执行了上述命令后还是不行</span>
-<span style="color:#75715e"># 可以再看下Git的 core.precomposeUnicode 这个参数</span></code></pre></div>
-<p>情景模拟：</p>
-
+<span style="color:#75715e"># 可以再看下Git的 core.precomposeUnicode 这个参数</span>
+</code></pre></div><p>情景模拟：</p>
 <p>先用下面的命令创建一个测试用的Git仓库：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 创建一个空的Git仓库</span>
 mkdir repo
@@ -208,24 +209,22 @@ cd repo
 git init
 
 <span style="color:#75715e"># 添加一个文件</span>
-touch 中文文件名.txt</code></pre></div>
-<p>然后执行git status命令：</p>
+touch 中文文件名.txt
+</code></pre></div><p>然后执行git status命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git status
 On branch master
 Untracked files:
   <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to include in what will be committed<span style="color:#f92672">)</span>
-  <span style="color:#e6db74">&#34;\344\270\255\346\226\207\346\226\207\344\273\266\345\220\215.txt&#34;</span></code></pre></div>
-<p>由上可见，我们新添加的文件并没有以中文正确显示。</p>
-
+  <span style="color:#e6db74">&#34;\344\270\255\346\226\207\346\226\207\344\273\266\345\220\215.txt&#34;</span>
+</code></pre></div><p>由上可见，我们新添加的文件并没有以中文正确显示。</p>
 <p>下面我们再执行下文章开始时介绍的命令设置一下Git：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git config --global core.quotePath false  <span style="color:#75715e"># 设置Git让其正确显示中文路径</span>
 $ git status <span style="color:#75715e"># 看下设置后的结果</span>
 On branch master
 Untracked files:
   <span style="color:#f92672">(</span>use <span style="color:#e6db74">&#34;git add &lt;file&gt;...&#34;</span> to include in what will be committed<span style="color:#f92672">)</span>
-  中文文件名.txt</code></pre></div>
-<p>看到了吧，在我们设置了Git的 <em>core.quotePath</em> 参数后，中文路径就可以正确显示了。</p>
-
+  中文文件名.txt
+</code></pre></div><p>看到了吧，在我们设置了Git的 <em>core.quotePath</em> 参数后，中文路径就可以正确显示了。</p>
 <p>简单又实用。</p>
 
 </div>
@@ -327,7 +326,7 @@ Untracked files:
       </li></ul>
   </nav>
 </section><div class='copyright'>
-  <p> &copy; 2017-2019 wangyuntao </p>
+  <p> &copy; 2017-2020 wangyuntao </p>
 </div>
 
         </div>

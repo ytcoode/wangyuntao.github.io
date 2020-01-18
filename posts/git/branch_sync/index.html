@@ -19,7 +19,7 @@ $ git clone https://github.com/wangyuntao/git-test-repo.git repo2 # 省略输出
 <meta property='og:site_name' content='技术闲聊'>
 <meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/69a9541105e77ead15e84fd1ce514f65?s=256'><meta property='article:section' content='posts'><meta property='article:tag' content='Git'><meta property='article:published_time' content='2019-10-28T23:02:27&#43;08:00'/><meta property='article:modified_time' content='2019-10-28T23:02:27&#43;08:00'/><meta name='twitter:card' content='summary'>
 
-<meta name="generator" content="Hugo 0.59.1" />
+<meta name="generator" content="Hugo 0.62.2" />
 
   <title>Git示例教程 - 同步本地分支的添加删除状态到远程（或反之） • wangyuntao</title>
   <link rel='canonical' href='https://ytcode.io/posts/git/branch_sync/'>
@@ -85,6 +85,8 @@ $ git clone https://github.com/wangyuntao/git-test-repo.git repo2 # 省略输出
 
   <div class='container list-container'>
   <ul class='list taxonomy-cloud'><li>
+        <a href='/tags/c/' style='font-size:1em'>c</a>
+      </li><li>
         <a href='/tags/git/' style='font-size:2em'>Git</a>
       </li><li>
         <a href='/tags/linux/' style='font-size:1.0714285714285714em'>linux</a>
@@ -196,9 +198,8 @@ git push --all --prune
 
 <span style="color:#75715e"># 遍历远程仓库中的所有分支，如果该分支在本地仓库中没有对应的远程追踪分支，则在本地仓库中创建该分支</span>
 <span style="color:#75715e"># 遍历本地仓库中的所有远程追踪分支，如果该分支在远程仓库中没有对应的分支，则将其删除</span>
-git fetch --prune</code></pre></div>
-<p>情景模拟：</p>
-
+git fetch --prune
+</code></pre></div><p>情景模拟：</p>
 <p>为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，之后，我们再用相应的命令创建一个测试分支，并将其同步到远端，具体命令如下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git clone https://github.com/wangyuntao/git-test-repo.git repo1
 <span style="color:#75715e"># 省略输出 #</span>
@@ -209,8 +210,8 @@ $ git -P branch -avv        <span style="color:#75715e"># 查看当前分支状�
 * master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
   remotes/origin/HEAD   -&gt; origin/master
   remotes/origin/b3     ab5a63d Initial commit
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>我们再打开一个终端，将该仓库再克隆一份到本地备用：</p>
+  remotes/origin/master ab5a63d Initial commit
+</code></pre></div><p>我们再打开一个终端，将该仓库再克隆一份到本地备用：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git clone https://github.com/wangyuntao/git-test-repo.git repo2
 <span style="color:#75715e"># 省略输出 #</span>
 $ cd repo2
@@ -218,13 +219,13 @@ $ git -P branch -avv
 * master                ab5a63d <span style="color:#f92672">[</span>origin/master<span style="color:#f92672">]</span> Initial commit
   remotes/origin/HEAD   -&gt; origin/master
   remotes/origin/b3     ab5a63d Initial commit
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>现在我们回到repo1中，执行下面的命令：</p>
+  remotes/origin/master ab5a63d Initial commit
+</code></pre></div><p>现在我们回到repo1中，执行下面的命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git branch b1          <span style="color:#75715e"># 创建本地分支b1</span>
 $ git branch b2          <span style="color:#75715e"># 创建本地分支b2</span>
 
 $ git push --all --prune <span style="color:#75715e"># 将本地分支的添加删除状态同步到远程</span>
-Total <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>delta <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>delta <span style="color:#ae81ff">0</span><span style="color:#f92672">)</span>
+Total <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>delta 0<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">0</span> <span style="color:#f92672">(</span>delta 0<span style="color:#f92672">)</span>
 To https://github.com/wangyuntao/git-test-repo.git
  - <span style="color:#f92672">[</span>deleted<span style="color:#f92672">]</span>         b3
  * <span style="color:#f92672">[</span>new branch<span style="color:#f92672">]</span>      b1 -&gt; b1
@@ -237,9 +238,8 @@ $ git -P branch -avv     <span style="color:#75715e"># 查看当前的分支状�
   remotes/origin/HEAD   -&gt; origin/master
   remotes/origin/b1     ab5a63d Initial commit
   remotes/origin/b2     ab5a63d Initial commit
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>由上可见，因为本地仓库中没有b3分支，所以 git push &ndash;all &ndash;prune 命令删除了远程仓库中的b3分支，又因为本地仓库中新建了b1和b2分支，所以该命令在远程仓库中也创建了这两个分支。</p>
-
+  remotes/origin/master ab5a63d Initial commit
+</code></pre></div><p>由上可见，因为本地仓库中没有b3分支，所以 git push &ndash;all &ndash;prune 命令删除了远程仓库中的b3分支，又因为本地仓库中新建了b1和b2分支，所以该命令在远程仓库中也创建了这两个分支。</p>
 <p>现在我们再切换到repo2，执行下面的命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ git branch b3 origin/b3 <span style="color:#75715e"># 创建远程追踪分支origin/b3的本地分支b3</span>
 Branch <span style="color:#e6db74">&#39;b3&#39;</span> set up to track remote branch <span style="color:#e6db74">&#39;b3&#39;</span> from <span style="color:#e6db74">&#39;origin&#39;</span>.
@@ -263,9 +263,8 @@ $ git -P branch -avv
   remotes/origin/HEAD   -&gt; origin/master
   remotes/origin/b1     ab5a63d Initial commit
   remotes/origin/b2     ab5a63d Initial commit
-  remotes/origin/master ab5a63d Initial commit</code></pre></div>
-<p>由上可见，因为远程仓库中的b3分支被删除，并且又创建了b1和b2分支，所以 git fetch &ndash;prune 命令删除了本地仓库中的远程追踪分支 origin/b3（但没有删除本地分支b3），并创建了远程追踪分支 origin/b1 和 origin/b2。</p>
-
+  remotes/origin/master ab5a63d Initial commit
+</code></pre></div><p>由上可见，因为远程仓库中的b3分支被删除，并且又创建了b1和b2分支，所以 git fetch &ndash;prune 命令删除了本地仓库中的远程追踪分支 origin/b3（但没有删除本地分支b3），并创建了远程追踪分支 origin/b1 和 origin/b2。</p>
 <p>到这里，有关本地仓库和远程仓库分支添加删除状态的同步就讲完了，希望对你有所帮助。</p>
 
 </div>
@@ -367,7 +366,7 @@ $ git -P branch -avv
       </li></ul>
   </nav>
 </section><div class='copyright'>
-  <p> &copy; 2017-2019 wangyuntao </p>
+  <p> &copy; 2017-2020 wangyuntao </p>
 </div>
 
         </div>

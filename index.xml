@@ -5,7 +5,7 @@
     <link>https://ytcode.io/</link>
     <description>Recent content in 微信公众号：ytcode &gt; on 技术闲聊</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Thu, 21 Nov 2019 18:35:37 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jan 2020 14:58:12 +0800</lastBuildDate>
     
 	<atom:link href="https://ytcode.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -17,6 +17,19 @@
       
       <guid>https://ytcode.io/%E5%85%B3%E4%BA%8E/</guid>
       <description>记录下日常的技术细节</description>
+    </item>
+    
+    <item>
+      <title>gcc编译时文件扩展名为.S和.s的区别</title>
+      <link>https://ytcode.io/posts/c/gcc_assembly/</link>
+      <pubDate>Sat, 18 Jan 2020 14:58:12 +0800</pubDate>
+      
+      <guid>https://ytcode.io/posts/c/gcc_assembly/</guid>
+      <description>gcc编译时，文件扩展名为.S和.s的区别是，.S支持预处理，而.s不支持。
+gcc编译一般分为四个阶段，分别是预处理、编译、汇编、链接。
+下面我们用一个小例子看下这四个阶段的作用，示例代码：
+$ ls lib.c lib.h main.c $ cat lib.h #ifndef __LIB_H#define __LIB_H extern int add(int a, int b); #endif /* __LIB_H */ $ cat lib.c #include &amp;#34;lib.h&amp;#34; int add(int a, int b) { return a + b; } $ cat main.c #include &amp;#34;lib.h&amp;#34; #define A 1#define B 2 int main() { return add(A, B); } 预处理的作用是宏展开和头文件替换：
+$ gcc -E main.c -o main.i $ cat main.i // 删除一些无关内容 extern int add(int a, int b); int main() { return add(1, 2); } 编译的作用是把c代码转成汇编代码：</description>
     </item>
     
     <item>
@@ -165,7 +178,7 @@ $ git clone https://github.com/wangyuntao/git-test-repo.git repo2 # 省略输出
       <description>相关命令：
 git branch -d 要删除的分支 # 删除本地分支 git branch -D 要删除的分支 # 强制删除本地分支 git push -d origin 要删除的分支 # 删除远程分支 情景模拟：
 为了方便测试，我们先在GitHub上创建一个名为git-test-repo的仓库，然后将其克隆到本地，并看下其当前的分支情况：
-$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master ab5a63d Initial commit  由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
+$ git clone https://github.com/wangyuntao/git-test-repo.git Cloning into &#39;git-test-repo&#39;... # 省略部分输出 # $ cd git-test-repo $ git -P branch -avv * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master ab5a63d Initial commit 由上可见，该仓库目前只有本地分支master，其对应的远程分支为origin/master（就是该仓库在GitHub上的master分支）。
 下面我们用上一篇文章中介绍过的命令，创建一个测试分支，并同步到远端：
 $ git branch b1 $ git push --set-upstream origin b1 # 省略输出 # $ git -P branch -avv b1 ab5a63d [origin/b1] Initial commit * master ab5a63d [origin/master] Initial commit remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/b1 ab5a63d Initial commit remotes/origin/master ab5a63d Initial commit 由上可见，我们创建了一个本地分支b1，然后将其同步到了GitHub上（orgin/b1）。</description>
     </item>
